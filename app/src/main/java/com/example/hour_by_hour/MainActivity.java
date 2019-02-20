@@ -8,7 +8,7 @@ public class MainActivity extends AppCompatActivity {
 // Justin has edited this line again
 
     public void displayInfo() {
-        Log.i("Main", "This is a new function");
+        Log.i("Main", "This is a new function I made");
     }
 
     @Override
