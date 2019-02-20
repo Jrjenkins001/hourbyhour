@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
     public void displayInfo() {
         Log.i("Main", "This is a new function");
     }
-
+//THis is my edit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
