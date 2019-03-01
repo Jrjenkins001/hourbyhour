@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
-// Justin has edited this line again
 
     public void displayInfo() {
         Log.i("Main", "This is a new function I made");
     }
 
-//This is my edit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
