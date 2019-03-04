@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hour-By-Hour</string>
+    <string name="event_name">Name</string>
+    <string name="example_event_name">Doctor\'s Apt</string>
+    <string name="location_name">Location</string>
+    <string name="example_location_name">Location</string>
+    <string name="time_start">Start Time</string>
+    <string name="time_end">End Time</string>
+    <string name="description_tag">Description</string>
+    <string name="alert_tag">Notifications</string>
+    <string name="add_alert_tag">Add new Notification</string>
 </resources>
