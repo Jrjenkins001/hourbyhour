@@ -7,7 +7,7 @@
     tools:context=".EditTask">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/toolbar_edit_event"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_event">
 
 
         <LinearLayout
@@ -48,7 +48,7 @@
                 android:labelFor="@+id/eventName"
                 android:text="@string/event_name"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_event" />
 
             <EditText
                 android:id="@+id/eventName"

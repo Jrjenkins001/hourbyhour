@@ -12,14 +12,16 @@ import android.widget.Toast;
 public class EditTask extends AppCompatActivity {
 
     @Override
+    // create a new instance with a toolbar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
         setSupportActionBar(myToolbar);
     }
 
     @Override
+    // create the options available for the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit_event, menu);
@@ -27,16 +29,16 @@ public class EditTask extends AppCompatActivity {
     }
 
     @Override
+    // when either the add or delete button is selected, this will be called
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_event:
-                // User chose the "Settings" item, show the app settings UI...
+                // User clicked on adding the selected event information
                 createEvent();
                 return true;
 
             case R.id.action_delete_event:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+                // User clicked on deleting the event currently being worked on
                 deleteEvent();
                 return true;
 
@@ -48,6 +50,10 @@ public class EditTask extends AppCompatActivity {
         }
     }
 
+    /**
+     * create a new event with the information provided in the inputs and returns
+     * to the main activity afterward.
+     */
     void createEvent() {
         CharSequence message = "Event Created";
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
@@ -57,6 +63,11 @@ public class EditTask extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * delete the event that is currently being edited, if there this is an existing
+     * event, delete from the list and return to the main activity. Otherwise, just
+     * return to the main activity.
+     */
     void deleteEvent() {
         CharSequence message = "Event Deleted";
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);

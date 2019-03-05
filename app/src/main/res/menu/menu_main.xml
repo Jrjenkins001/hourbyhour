@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="@string/edit_event_menu_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:id="@+id/action_add_new_event"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/change_day_view"
+        android:title="@string/change_to_daily_view"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/change_to_weekly_view"
+        android:id="@+id/change_week_view"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/change_to_monthly_view"
+        android:id="@+id/change_month_view"
+        app:showAsAction="never"/>
+
+</menu>

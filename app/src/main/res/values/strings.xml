@@ -13,5 +13,7 @@
     <!-- Menu Items -->
     <string name="edit_event_menu_add">Create Event</string>
     <string name="edit_event_menu_delete">Delete Event</string>
-    <string name="title_activity_week_view">WeekViewActivity</string>
+    <string name="change_to_daily_view">Daily View</string>
+    <string name="change_to_weekly_view">Weekly View</string>
+    <string name="change_to_monthly_view">Monthly View</string>
 </resources>
