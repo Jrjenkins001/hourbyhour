@@ -1,5 +1,9 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">Hour-By-Hour</string>
+    <string name="title_edit_event">Edit Event</string>
+
+
     <string name="event_name">Name</string>
     <string name="example_event_name">Doctor\'s Apt</string>
     <string name="location_name">Location</string>
@@ -16,4 +20,10 @@
     <string name="change_to_daily_view">Daily View</string>
     <string name="change_to_weekly_view">Weekly View</string>
     <string name="change_to_monthly_view">Monthly View</string>
+
+    <!-- Temp Values for placeholders-->
+    <string name="text_name">Name</string>
+    <string name="text_location">Location</string>
+    <string name="text_start_time">Start Time</string>
+    <string name="text_end_time">End Time</string>
 </resources>
