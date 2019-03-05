@@ -9,4 +9,9 @@
     <string name="description_tag">Description</string>
     <string name="alert_tag">Notifications</string>
     <string name="add_alert_tag">Add new Notification</string>
+
+    <!-- Menu Items -->
+    <string name="edit_event_menu_add">Create Event</string>
+    <string name="edit_event_menu_delete">Delete Event</string>
+    <string name="title_activity_week_view">WeekViewActivity</string>
 </resources>
