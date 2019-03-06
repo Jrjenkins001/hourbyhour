@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <EditText
+            android:id="@+id/week_date"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:ems="10"
+            android:inputType="date"
+            android:text="Week February 25-March 2" />
+
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/sunday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Sunday Feb 25" />
+
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right" />
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/monday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Monday Feb 25" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/tuesday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Tuesday Feb 26" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/wednesday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Wednesday Feb 27" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/thursday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Thursday Feb 28" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/friday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Friday Mar 1" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+
+        <TableRow>
+
+            <EditText
+                android:id="@+id/saturday"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:ems="10"
+                android:inputType="date"
+                android:text="Saturday Mar 2" />
+            <ListView
+                android:layout_width="291dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"/>
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>
