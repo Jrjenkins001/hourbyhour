@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case(R.id.change_day_view):
-                //TODO display day event info
+                setContentView(R.layout.day_view);
                 return true;
 
             case(R.id.change_month_view):
@@ -69,4 +69,9 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void displayDayExample(String eventsJSON) {
+        //feeling stuck on this
+    }
+
 }
