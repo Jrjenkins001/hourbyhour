@@ -3,7 +3,10 @@
     <string name="app_name">Hour-By-Hour</string>
     <string name="title_edit_event">Edit Event</string>
 
+    <!-- File Storage -->
+    <string name="saved_data_info"></string>
 
+    <!-- View values -->
     <string name="event_name">Name</string>
     <string name="example_event_name">Doctor\'s Apt</string>
     <string name="location_name">Location</string>
