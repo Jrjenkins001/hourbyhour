@@ -74,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
             case(R.id.change_day_view):
                 //TODO display day event info
+                //TODO change context back to weekly/monthly when leaving
                 setContentView(R.layout.day_view);
+                Toolbar toolbar = findViewById(R.id.toolbar_day_view);
+                setSupportActionBar(toolbar);
                 return true;
 
             case(R.id.change_month_view):
