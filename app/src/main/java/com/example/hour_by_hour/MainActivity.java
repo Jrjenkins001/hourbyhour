@@ -1,10 +1,6 @@
 package com.example.hour_by_hour;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         widget = findViewById(R.id.calendarView);
 
-        Gson g = new Gson();
+        //Gson g = new Gson();
         //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String dataString = getResources().getString(R.string.saved_data_info);
+        //String dataString = getResources().getString(R.string.saved_data_info);
         // for ease of testing
         // taskList = g.fromJson(dataString, ArrayList.class);
 
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeRecyclerView(int view){
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new TaskAdapter(days.get(0).dayTasks);
@@ -78,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
             case (R.id.change_day_view):
                 //TODO display day event info
-                initializeRecyclerView(R.id.day_recycler_view);
                 setContentView(R.layout.day_view);
+                initializeRecyclerView(R.id.day_recycler_view);
                 Toolbar toolbar = findViewById(R.id.toolbar_day_view);
                 setSupportActionBar(toolbar);
                 return true;
