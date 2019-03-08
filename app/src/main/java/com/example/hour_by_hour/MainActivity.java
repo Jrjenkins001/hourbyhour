@@ -28,33 +28,38 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Task> taskList;
+    ArrayList<Day> days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        recyclerView = findViewById(R.id.recycler_view);
+        days = Day.createDays(3);
 
-        recyclerView.setHasFixedSize(true);
+        initializeRecyclerView(R.id.recycler_view);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        //mAdapter = new TaskAdapter();
-        recyclerView.setAdapter(mAdapter);
         Toolbar myToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(myToolbar);
         widget = findViewById(R.id.calendarView);
 
         Gson g = new Gson();
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String dataString = getResources().getString(R.string.saved_data_info);
         // for ease of testing
         // taskList = g.fromJson(dataString, ArrayList.class);
 
         taskList = new ArrayList<>();
         taskList.add(new Task());
+    }
+
+    private void initializeRecyclerView(int view){
+        recyclerView = findViewById(R.id.recycler_view);
+        //recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new TaskAdapter(days.get(0).dayTasks);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -65,30 +70,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case (R.id.action_add_new_event):
                 Intent intent = new Intent(this, EditTask.class);
                 startActivity(intent);
                 return true;
 
-            case(R.id.change_day_view):
+            case (R.id.change_day_view):
                 //TODO display day event info
+                initializeRecyclerView(R.id.day_recycler_view);
                 setContentView(R.layout.day_view);
                 Toolbar toolbar = findViewById(R.id.toolbar_day_view);
                 setSupportActionBar(toolbar);
                 return true;
 
-            case(R.id.change_month_view):
+            case (R.id.change_month_view):
                 setContentView(R.layout.main_activity);
+                initializeRecyclerView(R.id.recycler_view);
                 toolbar = findViewById(R.id.toolbar_main);
                 setSupportActionBar(toolbar);
                 widget = findViewById(R.id.calendarView);
                 widget.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS).commit();
                 return true;
 
-            case(R.id.change_week_view):
+            case (R.id.change_week_view):
                 setContentView(R.layout.main_activity);
+                initializeRecyclerView(R.id.recycler_view);
                 toolbar = findViewById(R.id.toolbar_main);
                 setSupportActionBar(toolbar);
                 widget = findViewById(R.id.calendarView);
@@ -98,10 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void displayDayExample(String eventsJSON) {
-        //feeling stuck on this
-    }
-
 
     protected void onPause() {
         super.onPause();
@@ -109,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
         Gson g = new Gson();
         String dataJSON = g.toJson(taskList);
         Log.i("MAIN", dataJSON);
-        Log.e("ONPAUSE", "IN ON PAUSE");
+        Log.e("ON_PAUSE", "IN ON PAUSE");
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.saved_data_info), dataJSON);
+        //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences.Editor editor = sharedPref.edit();
+        //editor.putString(getString(R.string.saved_data_info), dataJSON);
     }
 }

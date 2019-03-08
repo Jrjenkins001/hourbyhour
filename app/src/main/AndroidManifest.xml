@@ -9,9 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditTask"
+        <activity android:name=".ViewTask"></activity>
+        <activity
+            android:name=".EditTask"
             android:label="@string/title_edit_event"
-            android:parentActivityName="com.example.hour_by_hour.MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
