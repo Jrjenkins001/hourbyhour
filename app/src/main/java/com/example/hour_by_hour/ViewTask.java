@@ -1,13 +1,14 @@
 package com.example.hour_by_hour;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ViewTask extends AppCompatActivity {
-    Task task;
+    @NonNull Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +17,7 @@ public class ViewTask extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        try {
+        try{
             task = extras.getParcelable("TASK");
         } catch (Exception e) {
             Intent intent = new Intent(this, MainActivity.class);

@@ -16,7 +16,6 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
 implements Serializable {
     private List<Task> taskList;
-    Context context;
 
     public class TaskViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, Serializable{
