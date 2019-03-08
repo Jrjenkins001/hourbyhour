@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        days = Day.createDays(3);
+        days = Day.createDays(10);
 
         initializeRecyclerView(R.id.recycler_view);
 
@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeRecyclerView(int view){
         recyclerView = findViewById(R.id.recycler_view);
-        //recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new TaskAdapter(days.get(0).dayTasks);
