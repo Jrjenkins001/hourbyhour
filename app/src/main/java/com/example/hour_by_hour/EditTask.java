@@ -84,7 +84,6 @@ public class EditTask extends AppCompatActivity {
         Task task = new Task();
 
         GregorianCalendar gc = new GregorianCalendar(2019, 12, 7);
-        LocalDate ld = new LocalDate(gc);
 
         TextView name = findViewById(R.id.task_name);
         TextView description = findViewById(R.id.task_name);
