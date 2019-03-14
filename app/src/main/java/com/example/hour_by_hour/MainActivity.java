@@ -20,9 +20,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private MaterialCalendarView widget;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Task> taskList;
     ArrayList<Day> days;
 
@@ -31,13 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        days = Day.createDays(10);
+        // exclusively for testing
+        //TODO remove this
+        days = Day.createDays(1);
+
 
         initializeRecyclerView(R.id.recycler_view);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(myToolbar);
         widget = findViewById(R.id.calendarView);
+
 
         //Gson g = new Gson();
         //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -50,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeRecyclerView(int view){
-        recyclerView = findViewById(view);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new TaskAdapter(days.get(0).dayTasks);
+        RecyclerView.Adapter mAdapter = new TaskAdapter(days.get(0).dayTasks);
         recyclerView.setAdapter(mAdapter);
     }
 

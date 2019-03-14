@@ -88,6 +88,24 @@
                 tools:targetApi="o" />
 
             <TextView
+                android:id="@+id/label_description_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:text="@string/description_tag" />
+
+            <EditText
+                android:id="@+id/description_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+
+            <TextView
                 android:id="@+id/start_time_text_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

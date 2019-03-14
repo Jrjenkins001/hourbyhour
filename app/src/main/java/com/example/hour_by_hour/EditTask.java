@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,8 +44,8 @@ public class EditTask extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
-        name  = findViewById(R.id.task_name);
-        description  = findViewById(R.id.task_description);
+        name  = findViewById(R.id.event_name_edit);
+        description  = findViewById(R.id.description_edit);
         location = findViewById(R.id.location_text_edit);
         startTime = findViewById(R.id.start_time_picker_edit);
         endTime = findViewById(R.id.end_time_picker_edit);
