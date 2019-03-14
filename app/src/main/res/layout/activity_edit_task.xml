@@ -97,11 +97,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/location_text_edit" />
 
-            <Spinner
-                android:id="@+id/start_time_picker_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <DatePicker
                 android:id="@+id/start_date_picker_edit"
                 android:layout_width="250dp"
@@ -112,6 +107,16 @@
                 android:datePickerMode="spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/start_time_picker_edit" />
+
+            <TimePicker
+                android:id="@+id/start_time_picker_edit"
+                android:layout_width="250dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:timePickerMode="spinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/start_time_text_edit" />
 
             <TextView
                 android:id="@+id/end_time_text_edit"

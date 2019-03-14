@@ -13,7 +13,7 @@ public class ViewTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_view);
 
-        task = getIntent().getParcelableExtra("TASK");
+        task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK_INFO));
 
         TextView name = findViewById(R.id.task_name);
         TextView location = findViewById(R.id.task_location);

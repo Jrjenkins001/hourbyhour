@@ -1,27 +1,32 @@
 package com.example.hour_by_hour;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import java.time.LocalDate;
 import android.widget.DatePicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.sql.Time;
-import java.time.LocalDate;
-import java.util.GregorianCalendar;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 public class EditTask extends AppCompatActivity {
+    TextView name;
+    TextView description;
+    TextView location;
+    TimePicker startTime;
+    TimePicker endTime;
+    DatePicker startDate;
+    DatePicker endDate;
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,13 +39,25 @@ public class EditTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
-        Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
-        setSupportActionBar(myToolbar);
-
         ActionBar ab = getSupportActionBar();
 
         if(ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
+        }
+
+        name  = findViewById(R.id.task_name);
+        description  = findViewById(R.id.task_description);
+        location = findViewById(R.id.location_text_edit);
+        startTime = findViewById(R.id.start_time_picker_edit);
+        endTime = findViewById(R.id.end_time_picker_edit);
+        startDate = findViewById(R.id.start_date_picker_edit);
+        endDate = findViewById(R.id.end_date_picker_edit);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
+        setSupportActionBar(myToolbar);
+
+        if((getIntent().getExtras() != null) && !getIntent().getExtras().isEmpty()){
+            fillFields((Task) getIntent().getExtras().getParcelable(getString(R.string.EXTRA_TASK_INFO)));
         }
     }
 
@@ -74,32 +91,64 @@ public class EditTask extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
         toast.show();
 
-        Task task = createTask();
-
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(getString(R.string.EXTRA_TASK_INFO), createTask());
         startActivity(intent);
     }
 
+    /**
+     * create the task object that will be displayed
+     * @return task that was made from the inputs
+     */
     Task createTask() {
         Task task = new Task();
-
-        GregorianCalendar gc = new GregorianCalendar(2019, 12, 7);
-
-        TextView name = findViewById(R.id.task_name);
-        TextView description = findViewById(R.id.task_name);
-        TextView location = findViewById(R.id.location_text_edit);
-        //Spinner startTime = findViewById(R.id.start_time_picker_edit);
-        //Spinner endTime = findViewById(R.id.end_time_picker_edit);
-        //Spinner startDate = findViewById(R.id.start_date_picker_edit);
-        //Spinner endDate = findViewById(R.id.end_date_picker_edit);
 
         task.setName(name.getText().toString());
         task.setDescription(description.getText().toString());
         task.setLocation(location.getText().toString());
-        //task.setStartHour(startTime);
+
+        if(Build.VERSION.SDK_INT >= 23) {
+            task.setStartHour(startTime.getHour());
+            task.setStartMinute(startTime.getMinute());
+            task.setEndHour(endTime.getHour());
+            task.setEndMinute(endTime.getMinute());
+        } else {
+            task.setStartHour(startTime.getCurrentHour());
+            task.setStartMinute(startTime.getCurrentMinute());
+            task.setEndHour(endTime.getCurrentHour());
+            task.setEndMinute(endTime.getCurrentMinute());
+        }
+
+        task.setStartDate(CalendarDay.from(startDate.getYear(),startDate.getMonth(), startDate.getDayOfMonth()));
+        task.setEndDate(CalendarDay.from(endDate.getYear(),endDate.getMonth(), endDate.getDayOfMonth()));
 
 
         return task;
+    }
+
+    /**
+     * fill the newly created activity with the task given
+     * @param task the information to fill out the fields
+     */
+    void fillFields(Task task){
+        name.setText(task.getName());
+        description.setText(task.getDescription());
+        location.setText(task.getLocation());
+
+        if(Build.VERSION.SDK_INT >= 23) {
+            endTime.setHour(task.getEndHour());
+            endTime.setMinute(task.getEndMinute());
+            startTime.setHour(task.getStartHour());
+            startTime.setMinute(task.getStartMinute());
+        } else {
+            endTime.setCurrentHour(task.getEndHour());
+            endTime.setCurrentMinute(task.getEndMinute());
+            startTime.setCurrentHour(task.getStartHour());
+            startTime.setCurrentMinute(task.getStartMinute());
+        }
+
+        startDate.updateDate(task.getStartDate().getYear(), task.getStartDate().getMonth(), task.getStartDate().getDay());
+        endDate.updateDate(task.getEndDate().getYear(), task.getEndDate().getMonth(), task.getEndDate().getDay());
     }
 
     /**

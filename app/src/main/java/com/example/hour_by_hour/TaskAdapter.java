@@ -4,6 +4,7 @@ package com.example.hour_by_hour;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,10 +55,11 @@ implements Serializable {
         @Override
         public void onClick(View view){
             int position = getAdapterPosition();
+
             if(position != RecyclerView.NO_POSITION) {
                 Task task = taskList.get(position);
                 Intent intent = new Intent(view.getContext(), ViewTask.class);
-                intent.putExtra("TASK", task);
+                intent.putExtra(view.getContext().getString(R.string.EXTRA_TASK_INFO), task);
                 view.getContext().startActivity(intent);
             }
         }

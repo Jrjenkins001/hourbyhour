@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import static com.prolificinteractive.materialcalendarview.CalendarDay.from;
+
 public class Task implements Parcelable {
     private CalendarDay startDate;
     private CalendarDay endDate;
@@ -20,22 +22,22 @@ public class Task implements Parcelable {
     // TODO add alarms to the member variable
 
     Task() {
-        int startYear = 2018;
-        int startMonth = 3;
-        int startDay = 5;
-        int endYear = 2019;
-        int endMonth = 5;
-        int endDay = 21;
-        name = "This appointment";
+        int startYear = 9999;
+        int startMonth = 99;
+        int startDay = 99;
+        int endYear = 9999;
+        int endMonth = 99;
+        int endDay = 99;
+        name = "No name on file";
 
-        startDate = new com.prolificinteractive.materialcalendarview.CalendarDay(startYear, startMonth, startDay);
-        endDate = new com.prolificinteractive.materialcalendarview.CalendarDay(endYear, endMonth, endDay);
+        startDate = from(startYear, startMonth, startDay);
+        endDate = from(endYear, endMonth, endDay);
 
-        startHour = 8;
-        startMinute = 0;
-        endHour = 12;
-        endMinute = 30;
-        location = "Here";
+        startHour = 99;
+        startMinute = 99;
+        endHour = 99;
+        endMinute = 99;
+        location = "No Location on file";
     }
 
     String getLocation() {
@@ -48,6 +50,22 @@ public class Task implements Parcelable {
 
     String getName() {
         return name;
+    }
+
+    int getStartHour() {
+        return startHour;
+    }
+
+    int getStartMinute() {
+        return startMinute;
+    }
+
+    int getEndHour() {
+        return endHour;
+    }
+
+    int getEndMinute() {
+        return endMinute;
     }
 
     String getStartTime() {

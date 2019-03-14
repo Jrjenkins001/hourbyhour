@@ -24,6 +24,9 @@
     <string name="change_to_weekly_view">Weekly View</string>
     <string name="change_to_monthly_view">Monthly View</string>
 
+    <!-- intent extras -->
+    <string name="EXTRA_TASK_INFO">com.example.hour_by_hour.TASK</string>
+
     <!-- Temp Values for placeholders-->
     <string name="text_name">Name</string>
     <string name="text_location">Location</string>

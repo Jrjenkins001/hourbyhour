@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
         Gson g = new Gson();
         String dataJSON = g.toJson(taskList);
-        Log.i("MAIN", dataJSON);
-        Log.e("ON_PAUSE", "IN ON PAUSE");
 
         //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         //SharedPreferences.Editor editor = sharedPref.edit();
