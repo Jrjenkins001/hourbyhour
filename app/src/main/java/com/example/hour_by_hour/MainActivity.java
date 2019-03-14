@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         //String dataString = getResources().getString(R.string.saved_data_info);
         // for ease of testing
-        // taskList = g.fromJson(dataString, ArrayList.class);
+        // dayList = g.fromJson(dataString, ArrayList.class);
 
         taskList = new ArrayList<>();
         taskList.add(new Task());

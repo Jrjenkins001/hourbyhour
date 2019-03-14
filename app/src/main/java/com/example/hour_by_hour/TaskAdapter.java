@@ -13,10 +13,17 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Creates the cards that the Recycler View will use to work with
+ */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
 implements Serializable {
+
     private List<Task> taskList;
 
+    /**
+     * Display system that is used
+     */
     public class TaskViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, Serializable{
         // each data item is an Event object
@@ -25,6 +32,10 @@ implements Serializable {
         TextView startTime;
         TextView endTime;
 
+        /**
+         * create a card that has the view items selected
+         * @param itemView the layout being used
+         */
         TaskViewHolder(View itemView) {
             super(itemView);
 
@@ -36,6 +47,10 @@ implements Serializable {
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * When a card is clicked, you are able to view the details of the event
+         * @param view card being selected
+         */
         @Override
         public void onClick(View view){
             int position = getAdapterPosition();
@@ -48,6 +63,10 @@ implements Serializable {
         }
     }
 
+    /**
+     * fill the TaskAdapter with the provided list
+     * @param taskList
+     */
     TaskAdapter(List<Task> taskList){
         this.taskList = taskList;
     }
@@ -76,8 +95,8 @@ implements Serializable {
 
         nameView.setText(task.name);
         locationView.setText(task.location);
-        startTimeView.setText(task.startTime);
-        endTimeView.setText(task.endTime);
+        startTimeView.setText(task.getStartTime());
+        endTimeView.setText(task.getEndTime());
     }
 
     @Override

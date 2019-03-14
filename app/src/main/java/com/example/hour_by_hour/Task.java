@@ -5,23 +5,17 @@ import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class Task implements Parcelable {
-    CalendarDay startDate;
-    CalendarDay endDate;
-    int startHour;
-    int startMinute;
-    int endHour;
-    int endMinute;
+    private CalendarDay startDate;
+    private CalendarDay endDate;
+    private int startHour;
+    private int startMinute;
+    private int endHour;
+    private int endMinute;
 
     String description;
     String name;
     String location;
-    String startTime;
-    String endTime;
 
     // TODO add alarms to the member variable
 
@@ -42,9 +36,70 @@ public class Task implements Parcelable {
         endHour = 12;
         endMinute = 30;
         location = "Here";
+    }
 
-        startTime = startHour + ":" + (startMinute < 10 ? "0" : "" ) + startMinute;
-        endTime = endHour + ":" + endMinute;
+    String getLocation() {
+        return location;
+    }
+
+    String getDescription() {
+        return description;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    String getStartTime() {
+        return startHour + ":" + (startMinute < 10 ? "0" : "" ) + startMinute;
+    }
+
+    String getEndTime() {
+        return endHour + ":" + (endMinute < 10 ? "0" : "") + endMinute;
+    }
+
+    CalendarDay getEndDate() {
+        return endDate;
+    }
+
+    CalendarDay getStartDate() {
+        return startDate;
+    }
+
+    void setLocation(String location) {
+        this.location = location;
+    }
+
+    void setDescription(String description) {
+        this.description = description;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
+
+    void setStartMinute(int startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    void setStartDate(CalendarDay startDate) {
+        this.startDate = startDate;
+    }
+
+    void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    void setEndMinute(int endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    void setEndDate(CalendarDay endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -61,8 +116,6 @@ public class Task implements Parcelable {
         out.writeInt(endHour);
         out.writeInt(startMinute);
         out.writeInt(endMinute);
-        out.writeString(startTime);
-        out.writeString(endTime);
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>(){
@@ -83,7 +136,5 @@ public class Task implements Parcelable {
         endHour = in.readInt();
         startMinute = in.readInt();
         endMinute = in.readInt();
-        startTime = in.readString();
-        endTime = in.readString();
     }
 }

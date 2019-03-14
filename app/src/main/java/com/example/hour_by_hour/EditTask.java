@@ -8,12 +8,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import java.time.LocalDate;
+import android.widget.DatePicker;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import java.sql.Time;
+import java.time.LocalDate;
+import java.util.GregorianCalendar;
 
 public class EditTask extends AppCompatActivity {
 
     @Override
-    // create a new instance with a toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit_event, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
@@ -28,15 +45,6 @@ public class EditTask extends AppCompatActivity {
     }
 
     @Override
-    // create the options available for the toolbar
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_edit_event, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    // when either the add or delete button is selected, this will be called
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_event:
@@ -66,8 +74,33 @@ public class EditTask extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
         toast.show();
 
+        Task task = createTask();
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    Task createTask() {
+        Task task = new Task();
+
+        GregorianCalendar gc = new GregorianCalendar(2019, 12, 7);
+        LocalDate ld = new LocalDate(gc);
+
+        TextView name = findViewById(R.id.task_name);
+        TextView description = findViewById(R.id.task_name);
+        TextView location = findViewById(R.id.location_text_edit);
+        //Spinner startTime = findViewById(R.id.start_time_picker_edit);
+        //Spinner endTime = findViewById(R.id.end_time_picker_edit);
+        //Spinner startDate = findViewById(R.id.start_date_picker_edit);
+        //Spinner endDate = findViewById(R.id.end_date_picker_edit);
+
+        task.setName(name.getText().toString());
+        task.setDescription(description.getText().toString());
+        task.setLocation(location.getText().toString());
+        //task.setStartHour(startTime);
+
+
+        return task;
     }
 
     /**

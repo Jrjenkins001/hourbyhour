@@ -7,7 +7,7 @@ import java.util.List;
 class Day implements Serializable {
     ArrayList<Task> dayTasks;
 
-    Day() { dayTasks = new ArrayList<>(); }
+    private Day() { dayTasks = new ArrayList<>(); }
 
     Day(ArrayList<Task> tasks) {
         dayTasks = tasks;
