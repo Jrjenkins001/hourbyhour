@@ -4,13 +4,11 @@
     <string name="title_edit_event">Edit Event</string>
 
     <!-- File Storage -->
-    <string name="saved_data_info"></string>
+    <string name="saved_data_info">com.example.hour_by_hour.SAVED_DATA</string>
 
     <!-- View values -->
     <string name="event_name">Name</string>
-    <string name="example_event_name">Doctor\'s Apt</string>
     <string name="location_name">Location</string>
-    <string name="example_location_name">Location</string>
     <string name="time_start">Start Time</string>
     <string name="time_end">End Time</string>
     <string name="description_tag">Description</string>

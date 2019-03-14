@@ -89,6 +89,7 @@
 
             <TextView
                 android:id="@+id/label_description_edit"
+                android:labelFor="@+id/description_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -103,7 +104,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:importantForAutofill="no"/>
 
             <TextView
                 android:id="@+id/start_time_text_edit"
