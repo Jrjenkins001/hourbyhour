@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 
 public class ViewTask extends AppCompatActivity {
-    Task task;
+    private Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,13 +17,13 @@ import android.widget.Toast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 public class EditTask extends AppCompatActivity {
-    TextView name;
-    TextView description;
-    TextView location;
-    TimePicker startTime;
-    TimePicker endTime;
-    DatePicker startDate;
-    DatePicker endDate;
+    private TextView name;
+    private TextView description;
+    private TextView location;
+    private TimePicker startTime;
+    private TimePicker endTime;
+    private DatePicker startDate;
+    private DatePicker endDate;
 
 
 
@@ -55,8 +55,9 @@ public class EditTask extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
         setSupportActionBar(myToolbar);
 
-        if((getIntent().getExtras() != null) && !getIntent().getExtras().isEmpty()){
-            fillFields((Task) getIntent().getExtras().getParcelable(getString(R.string.EXTRA_TASK_INFO)));
+        Task task;
+        if((task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK_INFO)))!= null){
+            fillFields(task);
         }
     }
 
@@ -85,7 +86,7 @@ public class EditTask extends AppCompatActivity {
      * create a new event with the information provided in the inputs and returns
      * to the main activity afterward.
      */
-    void createEvent() {
+    private void createEvent() {
         CharSequence message = "Event Created";
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
         toast.show();
@@ -99,7 +100,7 @@ public class EditTask extends AppCompatActivity {
      * create the task object that will be displayed
      * @return task that was made from the inputs
      */
-    Task createTask() {
+    private Task createTask() {
         Task task = new Task();
 
         task.setName(name.getText().toString());
@@ -129,7 +130,7 @@ public class EditTask extends AppCompatActivity {
      * fill the newly created activity with the task given
      * @param task the information to fill out the fields
      */
-    void fillFields(Task task){
+    private void fillFields(Task task){
         name.setText(task.getName());
         description.setText(task.getDescription());
         location.setText(task.getLocation());
@@ -155,7 +156,7 @@ public class EditTask extends AppCompatActivity {
      * event, delete from the list and return to the main activity. Otherwise, just
      * return to the main activity.
      */
-    void deleteEvent() {
+    private void deleteEvent() {
         CharSequence message = "Event Deleted";
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
         toast.show();

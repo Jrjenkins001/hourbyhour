@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MaterialCalendarView widget;
     private ArrayList<Task> taskList;
-    ArrayList<Day> days;
+    private ArrayList<Day> days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         widget = findViewById(R.id.calendarView);
 
 
-        //Gson g = new Gson();
+        Gson g = new Gson();
         //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         //String dataString = getResources().getString(R.string.saved_data_info);
         // for ease of testing

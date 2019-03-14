@@ -2,10 +2,9 @@ package com.example.hour_by_hour;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 class Day implements Serializable {
-    ArrayList<Task> dayTasks;
+    final ArrayList<Task> dayTasks;
 
     private Day() { dayTasks = new ArrayList<>(); }
 

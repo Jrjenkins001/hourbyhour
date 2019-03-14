@@ -19,7 +19,7 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
 implements Serializable {
 
-    private List<Task> taskList;
+    private final List<Task> taskList;
 
     /**
      * Display system that is used
@@ -27,10 +27,10 @@ implements Serializable {
     public class TaskViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, Serializable{
         // each data item is an Event object
-        TextView taskName;
-        TextView locationName;
-        TextView startTime;
-        TextView endTime;
+        final TextView taskName;
+        final TextView locationName;
+        final TextView startTime;
+        final TextView endTime;
 
         /**
          * create a card that has the view items selected
