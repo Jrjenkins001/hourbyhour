@@ -9,23 +9,27 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import static java.util.Collections.sort;
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
 
     private MaterialCalendarView _widget;
-    private HashMap<CalendarDay,ArrayList<Task>> _days;
+    private SparseArray<ArrayList<Task>> _days;
     private ArrayList<Task> _taskList;
     RecyclerView _recyclerView;
     private CalendarDay _calendarDay;
@@ -36,29 +40,51 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         setContentView(R.layout.main_activity);
 
         _taskList = new ArrayList<>();
+        _widget = findViewById(R.id.calendarView);
+        _widget.setOnDateChangedListener(this);
+        _days = new SparseArray<>();
+        _calendarDay = null;
+
+        /*Gson gson = new Gson();
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+        String dataString = sharedPref.getString(getString(R.string.saved_preferences_json), "NULL");
+        Log.i("MainActivity", dataString);
+
+        if(!dataString.equals("NULL")) {
+            _days = gson.fromJson(dataString, new TypeToken<SparseArray<ArrayList<Task>>>() {
+            }.getType());
+        }*/
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            CalendarDay calendarDay = extras.getParcelable(getString(R.string.EXTRA_CALENDAR_DAY));
+            Task task = extras.getParcelable(getString(R.string.EXTRA_TASK));
+
+            if(calendarDay != null) {
+                Log.i("MainActivity", "Calendar is not null");
+
+                ArrayList<Task> tasks = new ArrayList<>();
+
+                Log.i("MainActivity",(_days.get(calendarDay.hashCode()) != null) ? "True" : "False");
+                if(_days.size() > 0 || _days.get(calendarDay.hashCode()) != null) {
+                    Log.i("MainActivity", "There is a list already");
+                    tasks = _days.get(calendarDay.hashCode());
+                }
+
+                tasks.add(task);
+                _days.put(calendarDay.hashCode(), tasks);
+
+                sort(_days.get(calendarDay.hashCode()));
+                _taskList = _days.get(calendarDay.hashCode());
+                _widget.setCurrentDate(calendarDay);
+            } else {
+                Log.d ("MainActivity", "The calendar day is not transferring properly");
+            }
+        }
+
         initializeRecyclerView(R.id.recycler_view, _taskList);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(myToolbar);
-        _widget = findViewById(R.id.calendarView);
-        _widget.setOnDateChangedListener(this);
-
-        _days = new HashMap<>();
-        _calendarDay = null;
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            CalendarDay calendarDay = extras.getParcelable(getString(R.string.EXTRA_CALENDAR_DAY));
-            ArrayList<Task> tasks = extras.getParcelable(getString(R.string.EXTRA_TASK));
-
-            _days.put(calendarDay, tasks);
-        }
-
-        //Gson g = new Gson();
-        //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        //String dataString = getResources().getString(R.string.saved_data_info);
-        //for ease of testing
-        //days = g.fromJson(dataString, HashMap.class);
     }
 
     private void initializeRecyclerView(int view, ArrayList<Task> tasks){
@@ -83,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 Intent intent = new Intent(this, EditTask.class);
                 if(_calendarDay != null){
                     intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), _calendarDay);
+                    intent.putExtra(getString(R.string.EXTRA_TASK_INFO), _days.get(_calendarDay.hashCode()));
                 }
                 startActivity(intent);
                 return true;
@@ -121,17 +148,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         super.onPause();
 
         Gson g = new Gson();
-        String dataJSON = g.toJson(getString(R.string.saved_data_info));
+        String dayJSON = g.toJson(_days);
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.saved_data_info), dataJSON);
+        editor.putString(getString(R.string.saved_preferences_json), dayJSON);
         editor.apply();
     }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-        _taskList = _days.get(date);
+        _taskList = _days.get(date.hashCode());
         RecyclerView.Adapter mAdapter = new TaskAdapter(_taskList);
         _recyclerView.setAdapter(mAdapter);
         _calendarDay = date;

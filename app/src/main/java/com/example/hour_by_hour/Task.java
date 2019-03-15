@@ -5,9 +5,11 @@ import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.sql.Time;
+
 import static com.prolificinteractive.materialcalendarview.CalendarDay.from;
 
-public class Task implements Parcelable {
+public class Task implements Parcelable, Comparable<Task> {
     private CalendarDay startDate;
     private CalendarDay endDate;
     private int startHour;
@@ -22,22 +24,22 @@ public class Task implements Parcelable {
     // TODO add alarms to the member variable
 
     Task() {
-        int startYear = 9999;
-        int startMonth = 99;
-        int startDay = 99;
-        int endYear = 9999;
-        int endMonth = 99;
-        int endDay = 99;
-        name = "No name on file";
+        int startYear = 0;
+        int startMonth = 0;
+        int startDay = 0;
+        int endYear = 0;
+        int endMonth = 0;
+        int endDay = 0;
+        name = "No name";
 
         startDate = from(startYear, startMonth, startDay);
         endDate = from(endYear, endMonth, endDay);
 
-        startHour = 99;
-        startMinute = 99;
-        endHour = 99;
-        endMinute = 99;
-        location = "No Location on file";
+        startHour = 0;
+        startMinute = 0;
+        endHour = 0;
+        endMinute = 0;
+        location = "No Location";
     }
 
     String getLocation() {
@@ -154,5 +156,22 @@ public class Task implements Parcelable {
         endHour = in.readInt();
         startMinute = in.readInt();
         endMinute = in.readInt();
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        if(this.startHour > o.startHour) {
+            return 1;
+        } else if (this.startHour < o.startHour){
+            return -1;
+        } else {
+            if(this.startMinute > o.startMinute) {
+                return 1;
+            } else if (this.startMinute < o.startMinute) {
+                return -1;
+            } else {
+                return this.name.compareTo(o.name);
+            }
+        }
     }
 }

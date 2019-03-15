@@ -5,6 +5,7 @@
 
     <!-- File Storage -->
     <string name="saved_data_info">com.example.hour_by_hour.SAVED_DATA</string>
+    <string name="saved_preferences_json">com.example.hour_by_hour.SAVED_PREFERENCES_JSON</string>
 
     <!-- View values -->
     <string name="event_name">Name</string>

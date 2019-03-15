@@ -1,6 +1,5 @@
 package com.example.hour_by_hour;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -58,11 +57,9 @@ public class EditTask extends AppCompatActivity {
 
         Task task;
         CalendarDay day;
-        if((task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK_INFO)))!= null){
-            Log.i("EditTask", "Going to fill fields");
+        if((task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK)))!= null){
             fillFields(task);
         } else if((day = getIntent().getParcelableExtra(getString(R.string.EXTRA_CALENDAR_DAY))) != null){
-            Log.i("EditTask", "Setting dates separate");
             startDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
             endDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
         }
@@ -98,8 +95,10 @@ public class EditTask extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
         toast.show();
 
+        Task task = createTask();
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(getString(R.string.EXTRA_TASK_INFO), createTask());
+        intent.putExtra(getString(R.string.EXTRA_TASK), task);
+        intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), task.getStartDate());
         startActivity(intent);
     }
 
@@ -169,7 +168,7 @@ public class EditTask extends AppCompatActivity {
 
     private void showAlertDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        DeleteAlertFragment alertDialog = DeleteAlertFragment.newInstance("Some title");
+        DeleteAlertFragment alertDialog = DeleteAlertFragment.newInstance();
         alertDialog.show(fm, "fragment_alert");
     }
 }
