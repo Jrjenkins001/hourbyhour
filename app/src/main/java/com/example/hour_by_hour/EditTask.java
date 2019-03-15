@@ -1,11 +1,14 @@
 package com.example.hour_by_hour;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,8 +27,6 @@ public class EditTask extends AppCompatActivity {
     private TimePicker endTime;
     private DatePicker startDate;
     private DatePicker endDate;
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,8 +57,14 @@ public class EditTask extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         Task task;
+        CalendarDay day;
         if((task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK_INFO)))!= null){
+            Log.i("EditTask", "Going to fill fields");
             fillFields(task);
+        } else if((day = getIntent().getParcelableExtra(getString(R.string.EXTRA_CALENDAR_DAY))) != null){
+            Log.i("EditTask", "Setting dates separate");
+            startDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
+            endDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
         }
     }
 
@@ -157,11 +164,12 @@ public class EditTask extends AppCompatActivity {
      * return to the main activity.
      */
     private void deleteEvent() {
-        CharSequence message = "Event Deleted";
-        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-        toast.show();
+        showAlertDialog();
+    }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void showAlertDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        DeleteAlertFragment alertDialog = DeleteAlertFragment.newInstance("Some title");
+        alertDialog.show(fm, "fragment_alert");
     }
 }

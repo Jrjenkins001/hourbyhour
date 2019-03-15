@@ -102,6 +102,10 @@ implements Serializable {
 
     @Override
     public int getItemCount() {
+        if(taskList == null){
+            return 0;
+        }
+
         return taskList.size();
     }
 }
