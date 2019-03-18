@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -54,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             _days = gson.fromJson(dataString, new TypeToken<SparseArray<ArrayList<Task>>>() {
             }.getType());
         }*/
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             CalendarDay calendarDay = extras.getParcelable(getString(R.string.EXTRA_CALENDAR_DAY));
