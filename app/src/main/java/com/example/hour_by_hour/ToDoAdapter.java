@@ -44,11 +44,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
         ToDoViewHolder(View itemView) {
             super(itemView);
 
-            try {
-                listener = (onCheckBoxListener) itemView.getContext();
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Must implement onCheckBoxListener");
-            }
             toDoName = itemView.findViewById(R.id.to_do_name);
             complete = itemView.findViewById(R.id.checkBox);
 
