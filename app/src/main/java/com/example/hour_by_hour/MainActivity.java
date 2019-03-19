@@ -14,6 +14,7 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -22,13 +23,15 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import static com.example.hour_by_hour.Day.createDays;
 import static java.util.Collections.sort;
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
 
     private MaterialCalendarView _widget;
-    private SparseArray<ArrayList<Task>> _days;
+    private HashMap<Integer,ArrayList<Task>> _days;
     private ArrayList<Task> _taskList;
     RecyclerView _recyclerView;
     private CalendarDay _calendarDay;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         _taskList = new ArrayList<>();
         _widget = findViewById(R.id.calendarView);
         _widget.setOnDateChangedListener(this);
-        _days = new SparseArray<>();
+        _days = new HashMap<Integer, ArrayList<Task>>();
         _calendarDay = null;
 
         /*Gson gson = new Gson();
@@ -50,9 +53,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         Log.i("MainActivity", dataString);
 
         if(!dataString.equals("NULL")) {
-            _days = gson.fromJson(dataString, new TypeToken<SparseArray<ArrayList<Task>>>() {
+            _days = gson.fromJson(dataString, new TypeToken<HashMap<Integer, ArrayList<Task>>>() {
             }.getType());
         }*/
+
+
+        Gson gson = new Gson();
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+        String dataString = sharedPref.getString(getString(R.string.saved_preferences_json), "NULL");
+        Log.i("MainActivity", dataString);
+
+        if (!dataString.equals("NULL")) {
+            _days = (HashMap<Integer,ArrayList<Task>>) gson.fromJson(dataString, _days.getClass());
+        }
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
