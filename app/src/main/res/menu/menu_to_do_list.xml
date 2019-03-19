@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/month_view_to_do"
+        android:icon="@drawable/ic_today_black_24dp"
+        android:title="@string/change_to_monthly_view"
+        app:showAsAction="never|ifRoom" />
+
+    <item
+        android:id="@+id/add_to_do"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/add_item_to_do"
+        app:showAsAction="ifRoom" />
+
+</menu>

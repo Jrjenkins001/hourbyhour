@@ -4,13 +4,14 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".ViewTask"/>
+        android:theme="@style/AppTheme">
+        <activity android:name=".toDoListActivity"></activity>
+        <activity android:name=".ViewTask" />
         <activity
             android:name=".EditTask"
             android:label="@string/title_edit_event"
@@ -22,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".toDoListActivity" />
     </application>
 
 </manifest>

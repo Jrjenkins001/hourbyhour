@@ -81,14 +81,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             }
         }
 
-        initializeRecyclerView(R.id.recycler_view, _taskList);
+        initializeRecyclerView(_taskList);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(myToolbar);
     }
 
-    private void initializeRecyclerView(int view, ArrayList<Task> tasks){
-        _recyclerView = findViewById(view);
+    private void initializeRecyclerView(ArrayList<Task> tasks){
+        _recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         _recyclerView.setLayoutManager(layoutManager);
         RecyclerView.Adapter mAdapter = new TaskAdapter(tasks);
@@ -104,27 +104,25 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Toolbar toolbar;
         switch (item.getItemId()) {
             case (R.id.action_add_new_event):
                 Intent intent = new Intent(this, EditTask.class);
                 if(_calendarDay != null){
                     intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), _calendarDay);
-                    intent.putExtra(getString(R.string.EXTRA_TASK_INFO), _days.get(_calendarDay.hashCode()));
+                    intent.putExtra(getString(R.string.EXTRA_TASK), _days.get(_calendarDay.hashCode()));
                 }
                 startActivity(intent);
                 return true;
 
-            case (R.id.change_day_view):
-                //TODO display day event info
-                setContentView(R.layout.day_view);
-                initializeRecyclerView(R.id.day_recycler_view, _taskList);
-                Toolbar toolbar = findViewById(R.id.toolbar_day_view);
-                setSupportActionBar(toolbar);
+            case (R.id.change_to_do_list):
+                Intent intentToDo = new Intent(this, toDoListActivity.class);
+                startActivity(intentToDo);
                 return true;
 
             case (R.id.change_month_view):
                 setContentView(R.layout.main_activity);
-                initializeRecyclerView(R.id.recycler_view, _taskList);
+                initializeRecyclerView(_taskList);
                 toolbar = findViewById(R.id.toolbar_main);
                 setSupportActionBar(toolbar);
                 _widget = findViewById(R.id.calendarView);
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
             case (R.id.change_week_view):
                 setContentView(R.layout.main_activity);
-                initializeRecyclerView(R.id.recycler_view, _taskList);
+                initializeRecyclerView(_taskList);
                 toolbar = findViewById(R.id.toolbar_main);
                 setSupportActionBar(toolbar);
                 _widget = findViewById(R.id.calendarView);

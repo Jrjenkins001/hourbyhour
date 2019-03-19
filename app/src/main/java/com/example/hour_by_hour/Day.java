@@ -12,6 +12,7 @@ class Day implements Serializable {
         dayTasks = tasks;
     }
 
+    // TODO remove after testing
     static ArrayList<Day> createDays(int num){
         ArrayList<Day> days = new ArrayList<>();
         days.add(new Day());

@@ -19,7 +19,7 @@
     <!-- Menu Items -->
     <string name="edit_event_menu_add">Create Event</string>
     <string name="edit_event_menu_delete">Delete Event</string>
-    <string name="change_to_daily_view">Daily View</string>
+    <string name="change_to_to_do_list">To Do List</string>
     <string name="change_to_weekly_view">Weekly View</string>
     <string name="change_to_monthly_view">Monthly View</string>
 
@@ -37,4 +37,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="to_do_list_title">To Do:</string>
+    <string name="add_item_to_do">Add new item</string>
+    <string name="EXTRA_VIEW_SELECTION">com.example.hour_by_hour.EXTRA_VIEW_SELECTION</string>
+    <string name="SAVE_DATA_TO_DO_LIST">com.example.hour_by_hour.SAVE_DATA_TO_DO_LIST</string>
+    <string name="to_do_name">Unable to read name</string>
+    <string name="SAVE_DATA_COMPLETED_LIST">com.example.hour_by_hour.SAVE_DATA_COMPLETE_LIST</string>
+    <string name="switch_lists_to_do">Switch Lists</string>
+    <string name="create_to_do_dialog">Enter a name</string>
+    <string name="to_do_dialog_done">Done</string>
+    <string name="to_do_dialog_cancel">Cancel</string>
 </resources>

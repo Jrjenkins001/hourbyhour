@@ -7,9 +7,10 @@
         android:id="@+id/action_add_new_event"
         app:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/change_day_view"
-        android:title="@string/change_to_daily_view"
-        app:showAsAction="never"/>
+    <item
+        android:id="@+id/change_to_do_list"
+        android:title="@string/change_to_to_do_list"
+        app:showAsAction="never" />
 
     <item
         android:title="@string/change_to_weekly_view"

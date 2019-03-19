@@ -24,22 +24,30 @@ public class Task implements Parcelable, Comparable<Task> {
     // TODO add alarms to the member variable
 
     Task() {
-        int startYear = 0;
-        int startMonth = 0;
-        int startDay = 0;
-        int endYear = 0;
-        int endMonth = 0;
-        int endDay = 0;
         name = "No name";
+        description = "No Description";
+        location = "No Location";
 
-        startDate = from(startYear, startMonth, startDay);
-        endDate = from(endYear, endMonth, endDay);
-
+        startDate = from(0,0,0);
+        endDate = from(0,0,0);
         startHour = 0;
         startMinute = 0;
         endHour = 0;
         endMinute = 0;
-        location = "No Location";
+    }
+
+    Task (Task task) {
+        this.setName(task.name);
+        this.setDescription(task.getDescription());
+        this.setLocation(task.getLocation());
+
+        this.setStartDate(task.getStartDate());
+        this.setEndDate(task.getEndDate());
+        this.setStartHour(task.getStartHour());
+        this.setStartMinute(task.getStartMinute());
+        this.setEndHour(task.getEndHour());
+        this.setEndMinute(task.getEndMinute());
+
     }
 
     String getLocation() {
