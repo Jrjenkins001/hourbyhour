@@ -13,11 +13,11 @@ class Day implements Serializable {
     }
 
     // TODO remove after testing
-    static ArrayList<Day> createDays(int num){
-        ArrayList<Day> days = new ArrayList<>();
-        days.add(new Day());
+    static ArrayList<Task> createDays(int num){
+        ArrayList<Task> days = new ArrayList<>();
+        //days.add(new Day());
         for(int i = 0; i < num; i++){
-            days.get(0).dayTasks.add(new Task());
+            days.add(new Task());
         }
         return days;
     }

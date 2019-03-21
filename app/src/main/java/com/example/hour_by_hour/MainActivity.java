@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         _widget = findViewById(R.id.calendarView);
         _widget.setOnDateChangedListener(this);
         _days = new HashMap<Integer, ArrayList<Task>>();
+
+
         _calendarDay = null;
 
         /*Gson gson = new Gson();
@@ -61,10 +63,17 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         Gson gson = new Gson();
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
         String dataString = sharedPref.getString(getString(R.string.saved_preferences_json), "NULL");
+        Log.i("MainActivity", "log below is dataString from file");
         Log.i("MainActivity", dataString);
+
 
         if (!dataString.equals("NULL")) {
             _days = (HashMap<Integer,ArrayList<Task>>) gson.fromJson(dataString, _days.getClass());
+            Log.i("MainActivity", "Should be loading from file");
+        }
+        else {
+            _days.put(1,Day.createDays(3));
+            Log.i("MainActivity", "Creating from Day class");
         }
 
         Bundle extras = getIntent().getExtras();
@@ -165,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.saved_preferences_json), dayJSON);
         editor.apply();
+        Log.i("MainActivity", "Task file should be created");
     }
 
     @Override
