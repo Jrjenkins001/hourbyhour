@@ -1,21 +1,14 @@
 package com.example.hour_by_hour;
 
-import java.util.Collection;
-
 public class ToDo implements Comparable<ToDo>{
     private boolean _completed;
     private String _name;
-
-    ToDo() {
-        set_name("Empty");
-        set_completed(false);
-    }
 
     ToDo(String _name) {
         set_name(_name);
     }
 
-    private void set_completed(boolean _completed){
+    void set_completed(boolean _completed){
         this._completed = _completed;
     }
 
@@ -23,7 +16,7 @@ public class ToDo implements Comparable<ToDo>{
         return _completed;
     }
 
-    private void set_name(String _name) {
+    void set_name(String _name) {
         this._name = _name;
     }
 

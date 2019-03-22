@@ -24,12 +24,14 @@
         android:layout_height="wrap_content"
         android:fillViewport="false"
         android:orientation="vertical"
-
         android:padding="10dp"
+        android:paddingTop="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_event">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_event"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <LinearLayout
@@ -89,12 +91,12 @@
 
             <TextView
                 android:id="@+id/label_description_edit"
-                android:labelFor="@+id/description_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
+                android:labelFor="@+id/description_edit"
                 android:text="@string/description_tag" />
 
             <EditText
@@ -104,8 +106,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textMultiLine"
                 android:importantForAutofill="no"
+                android:inputType="textMultiLine"
                 tools:targetApi="o" />
 
             <TextView

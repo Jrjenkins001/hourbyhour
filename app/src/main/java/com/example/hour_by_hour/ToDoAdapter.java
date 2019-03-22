@@ -3,7 +3,6 @@ package com.example.hour_by_hour;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
         implements Serializable {
 
     private final List<ToDo> toDoList;
-    private onCheckBoxListener listener;
-
-    public interface onCheckBoxListener {
-        ToDo selectedToDo(CompoundButton button, boolean isChecked);
-    }
 
     /**
      * Display system that is used
@@ -67,8 +61,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
 
             if(position != RecyclerView.NO_POSITION) {
                 ToDo task = toDoList.get(position);
+                task.set_completed(!task.get_completed());
 
-                Log.i("ToDo", task.get_name() + "was clicked");
+                CheckBox cb = view.findViewById(R.id.checkBox);
+                cb.setChecked(task.get_completed());
             }
         }
 

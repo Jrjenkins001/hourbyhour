@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
 public class AddNewToDoDialogFragment extends DialogFragment {
@@ -26,13 +27,14 @@ public class AddNewToDoDialogFragment extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        builder.setView(inflater.inflate(R.layout.to_do_list_dialog, null, false));
+        final View v = inflater.inflate(R.layout.to_do_list_dialog, null, false);
+        builder.setView(v);
+        final EditText et = v.findViewById(R.id.input_name);
         builder.setMessage(R.string.create_to_do_dialog);
 
         builder.setPositiveButton(R.string.to_do_dialog_done, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText et = getActivity().findViewById(R.id.input_name);
                         listener.onDialogPositiveClick(AddNewToDoDialogFragment.this, et.getText().toString());
                     }
                 })

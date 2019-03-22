@@ -2,6 +2,7 @@ package com.example.hour_by_hour;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 
@@ -13,8 +14,14 @@ public class ViewTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_view);
 
+        Toolbar myToolbar = findViewById(R.id.toolbar_task_view);
+        setSupportActionBar(myToolbar);
+
         task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK_INFO));
 
+        if(task == null) {
+            task = new Task();
+        }
         TextView name = findViewById(R.id.task_name);
         TextView location = findViewById(R.id.task_location);
         TextView startTime = findViewById(R.id.task_start_time);

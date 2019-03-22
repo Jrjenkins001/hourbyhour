@@ -3,8 +3,10 @@ package com.example.hour_by_hour;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,11 +56,12 @@ implements Serializable {
         @Override
         public void onClick(View view){
             int position = getAdapterPosition();
+            Log.i("TaskAdapter", "Item clicked");
 
             if(position != RecyclerView.NO_POSITION) {
                 Task task = taskList.get(position);
                 Intent intent = new Intent(view.getContext(), ViewTask.class);
-                intent.putExtra(view.getContext().getString(R.string.EXTRA_TASK), task);
+                intent.putExtra(view.getContext().getString(R.string.EXTRA_TASK_INFO), (Parcelable) task);
                 view.getContext().startActivity(intent);
             }
         }

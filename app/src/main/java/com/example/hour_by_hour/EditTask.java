@@ -2,6 +2,7 @@ package com.example.hour_by_hour;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -96,7 +97,7 @@ public class EditTask extends AppCompatActivity {
 
         Task task = createTask();
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(getString(R.string.EXTRA_TASK), task);
+        intent.putExtra(getString(R.string.EXTRA_TASK), (Parcelable) task);
         intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), task.getStartDate());
         startActivity(intent);
     }

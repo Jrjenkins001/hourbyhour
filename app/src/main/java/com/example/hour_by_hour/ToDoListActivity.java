@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,9 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.sort;
-
-public class toDoListActivity extends AppCompatActivity implements AddNewToDoDialogFragment.AddNewToDoDialogListener{
+public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDialogFragment.AddNewToDoDialogListener{
     List<ToDo> _toDoList;
     List<ToDo> _completeList;
     RecyclerView.Adapter mAdapter;
@@ -62,6 +60,7 @@ public class toDoListActivity extends AppCompatActivity implements AddNewToDoDia
     private void initializeRecyclerView(List<ToDo> toDo){
         RecyclerView recyclerView = findViewById(R.id.to_do_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new ToDoAdapter(toDo);
         recyclerView.setAdapter(mAdapter);
@@ -92,9 +91,20 @@ public class toDoListActivity extends AppCompatActivity implements AddNewToDoDia
         }
     }
 
+    void rearrangeItems() {
+        for (ToDo item : _toDoList) {
+            if (item.get_completed()) {
+                _completeList.add(item);
+                _toDoList.remove(item);
+            }
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
+
+        rearrangeItems();
 
         gson = new Gson();
         String toDoJSON = gson.toJson(_toDoList);
@@ -118,8 +128,12 @@ public class toDoListActivity extends AppCompatActivity implements AddNewToDoDia
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String name) {
         _toDoList.add(new ToDo(name));
-        sort(_toDoList);
-        mAdapter.notifyDataSetChanged();
+
+        for(ToDo item: _toDoList){
+            Log.i("ToDoActivity", item.get_name());
+        }
+
+        initializeRecyclerView(_toDoList);
     }
 
     @Override

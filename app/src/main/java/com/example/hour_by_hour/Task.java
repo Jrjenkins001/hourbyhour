@@ -5,11 +5,12 @@ import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.io.Serializable;
 import java.sql.Time;
 
 import static com.prolificinteractive.materialcalendarview.CalendarDay.from;
 
-public class Task implements Parcelable, Comparable<Task> {
+public class Task implements Serializable, Parcelable, Comparable<Task> {
     private CalendarDay startDate;
     private CalendarDay endDate;
     private int startHour;
