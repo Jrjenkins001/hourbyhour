@@ -30,7 +30,6 @@ public class AddNewToDoDialogFragment extends DialogFragment {
         final View v = inflater.inflate(R.layout.to_do_list_dialog, null, false);
         builder.setView(v);
         final EditText et = v.findViewById(R.id.input_name);
-        builder.setMessage(R.string.create_to_do_dialog);
 
         builder.setPositiveButton(R.string.to_do_dialog_done, new DialogInterface.OnClickListener() {
                     @Override
