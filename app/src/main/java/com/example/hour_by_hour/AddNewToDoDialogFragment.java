@@ -19,7 +19,6 @@ public class AddNewToDoDialogFragment extends DialogFragment {
     }
 
     AddNewToDoDialogListener listener;
-    EditText nameText;
 
     @Override
     @NonNull
