@@ -47,4 +47,6 @@
     <string name="create_to_do_dialog">Enter a name</string>
     <string name="to_do_dialog_done">Done</string>
     <string name="to_do_dialog_cancel">Cancel</string>
+    <string name="delete_event_button">Delete Event</string>
+    <string name="edit_event_button">Edit Task</string>
 </resources>

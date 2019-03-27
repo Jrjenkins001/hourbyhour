@@ -32,7 +32,6 @@ import static java.util.Collections.sort;
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
 
     private MaterialCalendarView _widget;
-    //private HashMap<Integer,ArrayList<Task>> _days;
     private HashMap<String, ArrayList<Task>> _days;
     private ArrayList<Task> _taskList;
     RecyclerView _recyclerView;
@@ -53,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         Gson gson = new Gson();
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
         String dataString = sharedPref.getString(getString(R.string.saved_preferences_json), "NULL");
-        Log.i("MainActivity", "log below is dataString from file");
-        Log.i("MainActivity", dataString);
 
 
         if (dataString != null && !dataString.equals("NULL")) {
@@ -79,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Task task = extras.getParcelable(getString(R.string.EXTRA_TASK));
 
             if(calendarDay != null) {
-                //ArrayList<Task> taskItems = _days.get(calendarDay.hashCode());
                 ArrayList<Task> taskItems = _days.get(calendarDay.toString());
                 if(taskItems == null) {
                     Log.i("MainActivity", "Null List");
@@ -94,11 +90,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                     sort(taskItems);
 
                     Log.i("MainActivity", calendarDay.hashCode() + "Day");
-                    //_days.put(calendarDay.hashCode(), taskItems);
                     _days.put(calendarDay.toString(), taskItems);
                 }
-
-                //_taskList = _days.get(calendarDay.hashCode());
                 _taskList = _days.get(calendarDay.toString());
                 _widget.setCurrentDate(calendarDay);
             } else {
@@ -135,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 Intent intent = new Intent(this, EditTask.class);
                 if(_calendarDay != null){
                     intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), _calendarDay);
-                    //intent.putExtra(getString(R.string.EXTRA_TASK), _days.get(_calendarDay.hashCode()));
                     intent.putExtra(getString(R.string.EXTRA_TASK), _days.get(_calendarDay.toString()));
                 }
                 startActivity(intent);
@@ -188,11 +180,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             Gson g = new Gson();
             Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
             String dayJSON = g.toJson(_days, type);
+
             SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.saved_preferences_json), dayJSON);
             editor.apply();
-            Log.i("MainActivity", "Task file should be created");
         }
 
         Log.i("MainActivity", "The size is " + _days.size());
@@ -200,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-        //_taskList = _days.get(date.hashCode());
         _taskList = _days.get(date.toString());
         Log.i("MainActivity", date.toString());
         RecyclerView.Adapter mAdapter = new TaskAdapter(_taskList);

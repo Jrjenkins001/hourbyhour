@@ -6,13 +6,8 @@ import android.os.Parcelable;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.Serializable;
-import java.sql.Time;
-
-import static com.prolificinteractive.materialcalendarview.CalendarDay.from;
 
 public class Task implements Serializable, Parcelable, Comparable<Task> {
-    private CalendarDay startDate;
-    private CalendarDay endDate;
     private int startHour;
     private int startMinute;
     private int endHour;
@@ -22,6 +17,10 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     String name;
     String location;
 
+    int startYear;
+    int startMonth;
+    int startDay;
+
     // TODO add alarms to the member variable
 
     Task() {
@@ -29,26 +28,27 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         description = "No Description";
         location = "No Location";
 
-        startDate = from(0,0,0);
-        endDate = from(0,0,0);
+        startYear = 0;
+        startMonth = 0;
+        startDay = 0;
+
         startHour = 0;
         startMinute = 0;
         endHour = 0;
         endMinute = 0;
+        setStartDate(CalendarDay.today());
     }
 
     Task (Task task) {
         this.setName(task.name);
         this.setDescription(task.getDescription());
         this.setLocation(task.getLocation());
-
         this.setStartDate(task.getStartDate());
-        this.setEndDate(task.getEndDate());
         this.setStartHour(task.getStartHour());
         this.setStartMinute(task.getStartMinute());
         this.setEndHour(task.getEndHour());
         this.setEndMinute(task.getEndMinute());
-
+        this.setStartDate(task.getStartDate());
     }
 
     String getLocation() {
@@ -87,12 +87,8 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         return endHour + ":" + (endMinute < 10 ? "0" : "") + endMinute;
     }
 
-    CalendarDay getEndDate() {
-        return endDate;
-    }
-
     CalendarDay getStartDate() {
-        return startDate;
+        return CalendarDay.from(startYear,startMonth,startDay);
     }
 
     void setLocation(String location) {
@@ -116,7 +112,15 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     }
 
     void setStartDate(CalendarDay startDate) {
-        this.startDate = startDate;
+        this.startYear = startDate.getYear();
+        this.startMonth = startDate.getMonth();
+        this.startDay = startDate.getDay();
+    }
+
+    void setStartDate(int year, int month, int day) {
+        this.startYear = year;
+        this.startMonth = month;
+        this.startDay = day;
     }
 
     void setEndHour(int endHour) {
@@ -125,10 +129,6 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
 
     void setEndMinute(int endMinute) {
         this.endMinute = endMinute;
-    }
-
-    void setEndDate(CalendarDay endDate) {
-        this.endDate = endDate;
     }
 
     @Override
@@ -145,6 +145,9 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         out.writeInt(endHour);
         out.writeInt(startMinute);
         out.writeInt(endMinute);
+        out.writeInt(startYear);
+        out.writeInt(startMonth);
+        out.writeInt(startDay);
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>(){
@@ -165,6 +168,9 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         endHour = in.readInt();
         startMinute = in.readInt();
         endMinute = in.readInt();
+        startYear = in.readInt();
+        startMonth = in.readInt();
+        startDay = in.readInt();
     }
 
     @Override

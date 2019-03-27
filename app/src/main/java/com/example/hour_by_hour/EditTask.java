@@ -23,9 +23,7 @@ public class EditTask extends AppCompatActivity {
     private TextView description;
     private TextView location;
     private TimePicker startTime;
-    private TimePicker endTime;
     private DatePicker startDate;
-    private DatePicker endDate;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,9 +46,7 @@ public class EditTask extends AppCompatActivity {
         description  = findViewById(R.id.description_edit);
         location = findViewById(R.id.location_text_edit);
         startTime = findViewById(R.id.start_time_picker_edit);
-        endTime = findViewById(R.id.end_time_picker_edit);
         startDate = findViewById(R.id.start_date_picker_edit);
-        endDate = findViewById(R.id.end_date_picker_edit);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
         setSupportActionBar(myToolbar);
@@ -61,7 +57,6 @@ public class EditTask extends AppCompatActivity {
             fillFields(task);
         } else if((day = getIntent().getParcelableExtra(getString(R.string.EXTRA_CALENDAR_DAY))) != null){
             startDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
-            endDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
         }
     }
 
@@ -116,17 +111,12 @@ public class EditTask extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= 23) {
             task.setStartHour(startTime.getHour());
             task.setStartMinute(startTime.getMinute());
-            task.setEndHour(endTime.getHour());
-            task.setEndMinute(endTime.getMinute());
         } else {
             task.setStartHour(startTime.getCurrentHour());
             task.setStartMinute(startTime.getCurrentMinute());
-            task.setEndHour(endTime.getCurrentHour());
-            task.setEndMinute(endTime.getCurrentMinute());
         }
 
         task.setStartDate(CalendarDay.from(startDate.getYear(),startDate.getMonth(), startDate.getDayOfMonth()));
-        task.setEndDate(CalendarDay.from(endDate.getYear(),endDate.getMonth(), endDate.getDayOfMonth()));
 
 
         return task;
@@ -142,19 +132,14 @@ public class EditTask extends AppCompatActivity {
         location.setText(task.getLocation());
 
         if(Build.VERSION.SDK_INT >= 23) {
-            endTime.setHour(task.getEndHour());
-            endTime.setMinute(task.getEndMinute());
             startTime.setHour(task.getStartHour());
             startTime.setMinute(task.getStartMinute());
         } else {
-            endTime.setCurrentHour(task.getEndHour());
-            endTime.setCurrentMinute(task.getEndMinute());
             startTime.setCurrentHour(task.getStartHour());
             startTime.setCurrentMinute(task.getStartMinute());
         }
 
         startDate.updateDate(task.getStartDate().getYear(), task.getStartDate().getMonth(), task.getStartDate().getDay());
-        endDate.updateDate(task.getEndDate().getYear(), task.getEndDate().getMonth(), task.getEndDate().getDay());
     }
 
     /**
