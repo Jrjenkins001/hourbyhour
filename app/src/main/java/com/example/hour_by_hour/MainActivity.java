@@ -3,6 +3,7 @@ package com.example.hour_by_hour;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -213,5 +215,48 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         RecyclerView.Adapter mAdapter = new TaskAdapter(_taskList);
         _recyclerView.setAdapter(mAdapter);
         _calendarDay = date;
+    }
+
+
+    public class RepeatableEvents extends AsyncTask<Void, Void, Void> {
+        HashMap<String, ArrayList<Task>> days;
+        Task task;
+        private final int NUM_REPEATING_DAILY = 365;
+        private final int NUM_REPEATING_MONTHLY = 12;
+        private final int NUM_REPEATING_YEARLY = 5;
+
+        void getTaskInfo(Task task){
+            this.task = task;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            days = MainActivity.getSavedDays(new View(MainActivity.this));
+        }
+
+        @Override
+        protected Void doInBackground(Void ... aVoid) {
+            if (task.repeating.equals("Daily")){
+                for(int i = 0; i < NUM_REPEATING_DAILY; i++) {
+                    CalendarDay calendarDay = task.getStartDate();
+                }
+            } else if (task.repeating.equals("Weekly")) {
+
+            } else if (task.repeating.equals("Monthly")) {
+
+            } else if (task.repeating.equals("Yearly")) {
+
+            } else {
+                return null;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(MainActivity.this, "Completed adding events", Toast.LENGTH_LONG).show();
+            super.onPostExecute(aVoid);
+        }
     }
 }

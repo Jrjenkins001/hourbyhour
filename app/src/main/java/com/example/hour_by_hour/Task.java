@@ -21,6 +21,8 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     int startMonth;
     int startDay;
 
+    String repeating;
+
     // TODO add alarms to the member variable
 
     Task() {
@@ -37,6 +39,8 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         endHour = 0;
         endMinute = 0;
         setStartDate(CalendarDay.today());
+
+        repeating = "None";
     }
 
     Task (Task task) {
@@ -49,6 +53,7 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.setEndHour(task.getEndHour());
         this.setEndMinute(task.getEndMinute());
         this.setStartDate(task.getStartDate());
+        this.repeating = task.repeating;
     }
 
     String getLocation() {
@@ -91,6 +96,8 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         return CalendarDay.from(startYear,startMonth,startDay);
     }
 
+    String getRepeating() { return repeating; }
+
     void setLocation(String location) {
         this.location = location;
     }
@@ -117,6 +124,14 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.startDay = startDate.getDay();
     }
 
+    Task setNextDate(int repeating) {
+        Task task = this;
+
+
+
+        return task;
+    }
+
     void setStartDate(int year, int month, int day) {
         this.startYear = year;
         this.startMonth = month;
@@ -129,6 +144,10 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
 
     void setEndMinute(int endMinute) {
         this.endMinute = endMinute;
+    }
+
+    public void setRepeating(String repeating) {
+        this.repeating = repeating;
     }
 
     @Override
@@ -148,6 +167,7 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         out.writeInt(startYear);
         out.writeInt(startMonth);
         out.writeInt(startDay);
+        out.writeString(repeating);
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>(){
@@ -171,6 +191,7 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         startYear = in.readInt();
         startMonth = in.readInt();
         startDay = in.readInt();
+        repeating = in.readString();
     }
 
     @Override

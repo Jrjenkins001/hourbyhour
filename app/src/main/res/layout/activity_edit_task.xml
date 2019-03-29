@@ -142,14 +142,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/start_time_text_edit" />
 
             <TextView
+                android:labelFor="@+id/spinner_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/set_repeatability_edit"/>
+
+            <Spinner
+                android:id="@+id/spinner_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
                 android:id="@+id/notification_text_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/alert_tag"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/end_date_picker_edit" />
+                android:text="@string/alert_tag" />
 
 
             <Button
