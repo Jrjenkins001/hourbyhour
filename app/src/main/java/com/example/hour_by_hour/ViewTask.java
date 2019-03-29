@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,8 +70,12 @@ public class ViewTask extends AppCompatActivity {
             case(R.id.edit_event_menu_button):
                 Intent intent = new Intent(this, EditTask.class);
                 intent.putExtra(getString(R.string.EXTRA_TASK), (Parcelable) task);
+                intent.putExtra(getString(R.string.EXTRA_TASK_INFO), taskIndex);
                 startActivity(intent);
                 return true;
+
+            case(R.id.delete_event_menu_button):
+                deleteEventClick();
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,7 +83,7 @@ public class ViewTask extends AppCompatActivity {
 
     }
 
-    public void deleteEventClick(View view) {
+    public void deleteEventClick() {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
         String daysListJSON = sharedPreferences.getString(getString(R.string.saved_preferences_json), "NULL");
 

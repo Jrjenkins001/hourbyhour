@@ -35,6 +35,11 @@
     <string name="text_end_time">End Time</string>
     <string name="task_description">No Description</string>
 
+    <!-- Lists for spinners -->
+    <string-array name="repeating_names">
+
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="to_do_list_title">To Do:</string>
@@ -49,4 +54,5 @@
     <string name="to_do_dialog_cancel">Cancel</string>
     <string name="delete_event_button">Delete Event</string>
     <string name="edit_event_button">Edit Task</string>
+    <string name="EXTRA_TASK_EDIT">com.example.hour_by_hour.EXTRA_TASK_EDIT</string>
 </resources>

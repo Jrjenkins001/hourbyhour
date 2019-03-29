@@ -61,9 +61,11 @@ implements Serializable {
             if(position != RecyclerView.NO_POSITION) {
                 Task task = taskList.get(position);
                 Log.d("TaskAdapter",task.getStartDate().toString());
+
                 Intent intent = new Intent(view.getContext(), ViewTask.class);
                 intent.putExtra(view.getContext().getString(R.string.EXTRA_TASK), (Parcelable) task);
                 intent.putExtra(view.getContext().getString(R.string.EXTRA_TASK_INFO), position);
+
                 view.getContext().startActivity(intent);
             }
         }

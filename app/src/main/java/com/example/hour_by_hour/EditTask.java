@@ -8,15 +8,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static java.util.Collections.sort;
 
 public class EditTask extends AppCompatActivity {
     private TextView name;
@@ -24,6 +32,8 @@ public class EditTask extends AppCompatActivity {
     private TextView location;
     private TimePicker startTime;
     private DatePicker startDate;
+    private Task task;
+    private int taskIndex;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,13 +61,14 @@ public class EditTask extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
         setSupportActionBar(myToolbar);
 
-        Task task;
         CalendarDay day;
         if((task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK)))!= null){
             fillFields(task);
         } else if((day = getIntent().getParcelableExtra(getString(R.string.EXTRA_CALENDAR_DAY))) != null){
             startDate.updateDate(day.getYear(), day.getMonth(), day.getDay());
         }
+
+        taskIndex = getIntent().getIntExtra(getString(R.string.EXTRA_TASK_INFO), -100);
     }
 
     @Override
@@ -65,7 +76,11 @@ public class EditTask extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_event:
                 // User clicked on adding the selected event information
-                createEvent();
+                if(task == null) {
+                    createEvent();
+                } else {
+                    modifyEvent();
+                }
                 return true;
 
             case R.id.action_delete_event:
@@ -94,6 +109,46 @@ public class EditTask extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(getString(R.string.EXTRA_TASK), (Parcelable) task);
         intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), task.getStartDate());
+        startActivity(intent);
+
+    }
+
+    private void modifyEvent() {
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(findViewById(R.id.toolbar_edit_event));
+
+        ArrayList<Task> tasks = days.get(task.getStartDate().toString());
+        Task newTask = createTask();
+
+        Log.i("EditTask", new Gson().toJson(tasks));
+
+        if(tasks != null) {
+            tasks.remove(taskIndex);
+        } else {
+            Log.e("EditTask", "ERROR: tasks is null");
+            return;
+        }
+
+        if(task.getStartDate() != newTask.getStartDate()){
+            days.put(task.getStartDate().toString(), tasks);
+            tasks = days.get(newTask.getStartDate().toString());
+
+            if(tasks == null){
+                tasks = new ArrayList<>();
+            }
+        }
+
+        tasks.add(newTask);
+        sort(tasks);
+
+        days.put(newTask.getStartDate().toString(), tasks);
+
+        MainActivity.putSavedDays(new View(this), days);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Event modified", Toast.LENGTH_LONG);
+        toast.show();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), newTask.getStartDate());
         startActivity(intent);
     }
 

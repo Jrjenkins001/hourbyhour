@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -31,6 +32,45 @@ import static java.util.Collections.sort;
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
 
+    static HashMap<String, ArrayList<Task>> getSavedDays(View view) {
+        HashMap<String, ArrayList<Task>> days;
+        Gson gson = new Gson();
+        SharedPreferences sharedPref = view.getContext().getSharedPreferences(view.getContext().getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+        String dataString = sharedPref.getString(view.getContext().getString(R.string.saved_preferences_json), "NULL");
+
+
+        if (dataString != null && !dataString.equals("NULL")) {
+            Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
+            try {
+                days = gson.fromJson(dataString, type);
+            } catch (JsonSyntaxException e) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.clear().apply();
+                days = new HashMap<>();
+                Log.e("MainActivity", e.getMessage());
+                Log.e("MainActivity", "ERROR: COULD NOT READ FROM FILE");
+                Log.e("MainActivity", dataString);
+            }
+        } else {
+            days = new HashMap<>();
+        }
+
+        return days;
+    }
+
+    static void putSavedDays(View view, HashMap<String, ArrayList<Task>> days) {
+        Gson g = new Gson();
+        Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
+        String dayJSON = g.toJson(days, type);
+
+        SharedPreferences sharedPref =
+                view.getContext().getSharedPreferences(view.getContext().getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(view.getContext().getString(R.string.saved_preferences_json), dayJSON);
+        editor.apply();
+    }
+
+
     private MaterialCalendarView _widget;
     private HashMap<String, ArrayList<Task>> _days;
     private ArrayList<Task> _taskList;
@@ -48,27 +88,8 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         _widget.setCurrentDate(CalendarDay.today());
 
         _calendarDay = null;
+        _days = getSavedDays(new View(this));
 
-        Gson gson = new Gson();
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
-        String dataString = sharedPref.getString(getString(R.string.saved_preferences_json), "NULL");
-
-
-        if (dataString != null && !dataString.equals("NULL")) {
-            Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
-            try {
-                _days = gson.fromJson(dataString, type);
-            } catch (JsonSyntaxException e) {
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.clear().apply();
-                _days = new HashMap<>();
-                Log.e("MainActivity", e.getMessage());
-                Log.e("MainActivity", "ERROR: COULD NOT READ FROM FILE");
-                Log.e("MainActivity", dataString);
-            }
-        } else {
-            _days = new HashMap<>();
-        }
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -126,10 +147,12 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         switch (item.getItemId()) {
             case (R.id.action_add_new_event):
                 Intent intent = new Intent(this, EditTask.class);
+
                 if(_calendarDay != null){
                     intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), _calendarDay);
                     intent.putExtra(getString(R.string.EXTRA_TASK), _days.get(_calendarDay.toString()));
                 }
+
                 startActivity(intent);
                 return true;
 
@@ -177,14 +200,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         super.onPause();
 
         if(_days.size() > 0) {
-            Gson g = new Gson();
-            Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
-            String dayJSON = g.toJson(_days, type);
-
-            SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.saved_preferences_json), dayJSON);
-            editor.apply();
+            putSavedDays(new View(this), _days);
         }
 
         Log.i("MainActivity", "The size is " + _days.size());

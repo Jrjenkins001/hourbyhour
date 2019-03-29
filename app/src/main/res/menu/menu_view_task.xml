@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/delete_event_menu_button"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/delete_event_button"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/edit_event_menu_button"
         android:icon="@drawable/ic_edit_black_24dp"
         android:title="@string/edit_event_button"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>
