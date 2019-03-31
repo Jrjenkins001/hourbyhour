@@ -1,9 +1,13 @@
 package com.example.hour_by_hour;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +17,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,6 +33,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.hour_by_hour.Notification.CHANNEL_1_ID;
+import static com.example.hour_by_hour.Notification.CHANNEL_2_ID;
 import static java.util.Collections.sort;
 
 public class MainActivity extends AppCompatActivity implements OnDateSelectedListener {
@@ -36,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     private ArrayList<Task> _taskList;
     RecyclerView _recyclerView;
     private CalendarDay _calendarDay;
+    private NotificationManagerCompat notificationManger;
+    private EditText editTextTitle;
+    private EditText editTextMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         Toolbar myToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(myToolbar);
+
+        notificationManger = NotificationManagerCompat.from(this);
+
+        editTextTitle = findViewById(R.id.edit_text_title);
+        editTextMessage = findViewById(R.id.edit_text_message);
     }
 
     private void initializeRecyclerView(ArrayList<Task> tasks){
@@ -197,5 +213,49 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         RecyclerView.Adapter mAdapter = new TaskAdapter(_taskList);
         _recyclerView.setAdapter(mAdapter);
         _calendarDay = date;
+    }
+
+    public void sendOnChannel1(View view) {
+        String title = editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
+
+        Intent notifyIntent = new Intent(this,MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, notifyIntent,0);
+
+        Intent broadcastIntent = new Intent (this, NotificationReceiver.class);
+        broadcastIntent.putExtra("toastMessage", message);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
+                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        android.app.Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setColor(Color.BLUE)
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .addAction(R.mipmap.ic_launcher, "Toast", actionIntent)
+                .build();
+
+        notificationManger.notify(1,notification);
+    }
+
+    public void sendOnChannel2(View view) {
+        String title = editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
+
+        android.app.Notification notification = new NotificationCompat.Builder(this, CHANNEL_2_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManger.notify(2,notification);
+
     }
 }
