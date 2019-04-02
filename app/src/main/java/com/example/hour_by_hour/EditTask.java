@@ -33,6 +33,7 @@ public class EditTask extends AppCompatActivity {
     private TextView description;
     private TextView location;
     private TimePicker startTime;
+    private TimePicker endTime;
     private DatePicker startDate;
     private Task task;
     private int taskIndex;
@@ -65,6 +66,7 @@ public class EditTask extends AppCompatActivity {
         description  = findViewById(R.id.description_edit);
         location = findViewById(R.id.location_text_edit);
         startTime = findViewById(R.id.start_time_picker_edit);
+        endTime = findViewById(R.id.end_time_picker_edit);
         startDate = findViewById(R.id.start_date_picker_edit);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_edit_event);
@@ -172,15 +174,17 @@ public class EditTask extends AppCompatActivity {
         task.setDescription(description.getText().toString());
         task.setLocation(location.getText().toString());
         task.setRepeating(repeatingSpinner.getSelectedItem().toString());
-        Log.i("EditTask",task.getRepeating());
-        Log.i("EditTask", repeatingSpinner.getSelectedItem().toString());
 
         if(Build.VERSION.SDK_INT >= 23) {
             task.setStartHour(startTime.getHour());
             task.setStartMinute(startTime.getMinute());
+            task.setEndMinute(endTime.getMinute());
+            task.setEndHour(endTime.getHour());
         } else {
             task.setStartHour(startTime.getCurrentHour());
             task.setStartMinute(startTime.getCurrentMinute());
+            task.setEndHour(endTime.getCurrentHour());
+            task.setEndMinute(endTime.getCurrentMinute());
         }
 
         task.setStartDate(CalendarDay.from(startDate.getYear(),startDate.getMonth(), startDate.getDayOfMonth()));

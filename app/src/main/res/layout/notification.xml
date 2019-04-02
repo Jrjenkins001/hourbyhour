@@ -19,7 +19,7 @@
         android:id="@+id/edit_text_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hing="message"/>
+        android:hint="message"/>
 
     <Button
         android:layout_width="match_parent"

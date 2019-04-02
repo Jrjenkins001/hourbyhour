@@ -128,7 +128,7 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.startDay = startDate.getDay();
     }
 
-    void setStartDate(int year, int month, int day) {
+    private void setStartDate(int year, int month, int day) {
         this.startYear = year;
         this.startMonth = month;
         this.startDay = day;
@@ -142,7 +142,7 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.endMinute = endMinute;
     }
 
-    public void setRepeating(String repeating) {
+    void setRepeating(String repeating) {
         this.repeating = repeating;
     }
 

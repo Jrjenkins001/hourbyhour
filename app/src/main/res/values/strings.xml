@@ -41,6 +41,7 @@
     <!-- Temp Values for placeholders-->
     <string name="text_name">Name</string>
     <string name="text_location">Location</string>
+    <string name="text_select_date">Date</string>
     <string name="text_start_time">Start Time</string>
     <string name="text_end_time">End Time</string>
     <string name="task_description">No Description</string>
