@@ -25,7 +25,6 @@ import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,19 +105,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 }
 
                 if(task != null) {
-                    Log.i("MainActivity","We have a task " + task.getName());
+                    RepeatableEvents re = new RepeatableEvents();
+                    re.getTaskInfo(task);
+                    re.execute();
 
                     taskItems.add(task);
 
                     sort(taskItems);
 
-                    Log.i("MainActivity", calendarDay.hashCode() + "Day");
                     _days.put(calendarDay.toString(), taskItems);
                 }
                 _taskList = _days.get(calendarDay.toString());
                 _widget.setCurrentDate(calendarDay);
-            } else {
-                Log.d ("MainActivity", "The calendar day is not transferring properly");
             }
         }
 
@@ -183,16 +181,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 initializeRecyclerView(new ArrayList<Task>());
                 return true;
 
-            case (R.id.remove_shared_prefernces):
-                //TODO remove after all testing
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear().apply();
-                _days = new HashMap<>();
-                Toast toast = Toast.makeText(this, "Deleted File", Toast.LENGTH_SHORT);
-                toast.show();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -219,37 +207,44 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
 
     public class RepeatableEvents extends AsyncTask<Void, Void, Void> {
-        HashMap<String, ArrayList<Task>> days;
-        Task task;
         private final int NUM_REPEATING_DAILY = 365;
         private final int NUM_REPEATING_MONTHLY = 12;
         private final int NUM_REPEATING_YEARLY = 5;
+        private final int NUM_REPEATING_WEEKLY = 52;
+
+        Task task;
 
         void getTaskInfo(Task task){
             this.task = task;
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            days = MainActivity.getSavedDays(new View(MainActivity.this));
-        }
-
-        @Override
         protected Void doInBackground(Void ... aVoid) {
-            if (task.repeating.equals("Daily")){
-                for(int i = 0; i < NUM_REPEATING_DAILY; i++) {
-                    CalendarDay calendarDay = task.getStartDate();
-                }
-            } else if (task.repeating.equals("Weekly")) {
+            int repetitions;
 
-            } else if (task.repeating.equals("Monthly")) {
-
-            } else if (task.repeating.equals("Yearly")) {
-
+            if(task.repeating.equals(getString(R.string.yearly_array))){
+                repetitions = NUM_REPEATING_YEARLY;
+            } else if (task.repeating.equals(getString(R.string.monthly_array))){
+                repetitions = NUM_REPEATING_MONTHLY;
+            } else if (task.repeating.equals(getString(R.string.weekly_array))) {
+                repetitions = NUM_REPEATING_WEEKLY;
+            } else if (task.repeating.equals(getString(R.string.daily_array))){
+                repetitions = NUM_REPEATING_DAILY;
             } else {
-                return null;
+                repetitions = 0;
             }
+
+            for(int i = 0; i < repetitions; i++){
+                task = task.getNextRepeating(MainActivity.this);
+                ArrayList<Task> tasks = _days.get(task.getStartDate().toString());
+                if(tasks == null){
+                    tasks = new ArrayList<>();
+                }
+                tasks.add(task);
+                sort(tasks);
+                _days.put(task.getStartDate().toString(), tasks);
+            }
+
             return null;
         }
 

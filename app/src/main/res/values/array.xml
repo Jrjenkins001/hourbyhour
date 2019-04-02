@@ -2,9 +2,14 @@
 <resources>
     <string-array name="repeating_names">
         <item>None</item>
-        <item>Daily</item>
-        <item>Weekly</item>
-        <item>Monthly</item>
-        <item>Yearly</item>
+        <item>@string/daily_array</item>
+        <item>@string/weekly_array</item>
+        <item>@string/monthly_array</item>
+        <item>@string/yearly_array</item>
     </string-array>
+
+    <string name="daily_array">Daily</string>
+    <string name="monthly_array">Monthly</string>
+    <string name="weekly_array">Weekly</string>
+    <string name="yearly_array">Yearly</string>
 </resources>

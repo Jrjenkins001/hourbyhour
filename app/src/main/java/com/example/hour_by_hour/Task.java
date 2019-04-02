@@ -1,11 +1,15 @@
 package com.example.hour_by_hour;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Task implements Serializable, Parcelable, Comparable<Task> {
     private int startHour;
@@ -124,14 +128,6 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.startDay = startDate.getDay();
     }
 
-    Task setNextDate(int repeating) {
-        Task task = this;
-
-
-
-        return task;
-    }
-
     void setStartDate(int year, int month, int day) {
         this.startYear = year;
         this.startMonth = month;
@@ -148,6 +144,64 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
 
     public void setRepeating(String repeating) {
         this.repeating = repeating;
+    }
+
+    Task getNextRepeating(Context context){
+        Task task = this;
+        int addDay = startDay;
+        int addMonth = startMonth;
+        int addYear = startYear;
+
+        if (getRepeating().equals(context.getString(R.string.daily_array))){
+            return determineDay(this, 1);
+        } else if (getRepeating().equals((context.getString(R.string.weekly_array)))){
+            return determineDay(this, 7);
+        } else if (getRepeating().equals((context.getString(R.string.monthly_array)))) {
+            if(addMonth == 12){
+                addMonth = 1;
+                addYear++;
+            } else {
+                addMonth++;
+            }
+        } else if (getRepeating().equals((context.getString(R.string.yearly_array)))) {
+            addYear++;
+        } else {
+            return null;
+        }
+
+        task.setStartDate(addYear, addMonth, addDay);
+
+        return task;
+    }
+
+    private static Task determineDay(Task task, int addNum){
+        int maxDaysOfMonth;
+
+        int startMonth = task.startMonth;
+        int startDate = task.startDay;
+        int startYear = task.startYear;
+
+        if(startMonth == 1 || startMonth == 3 || startMonth == 5 || startMonth == 7
+                || startMonth == 8 || startMonth == 10 || startMonth == 12) {
+            maxDaysOfMonth = 30;
+        } else if (startMonth == 2) {
+            maxDaysOfMonth = 28;
+        } else {
+            maxDaysOfMonth = 31;
+        }
+
+        if (startDate + addNum > maxDaysOfMonth){
+            startDate = startDate + addNum - maxDaysOfMonth;
+            startMonth++;
+            if(startMonth > 12) {
+                startMonth = 1;
+                startYear++;
+            }
+        } else {
+            startDate += addNum;
+        }
+        task.setStartDate(startYear,startMonth,startDate);
+        return task;
     }
 
     @Override

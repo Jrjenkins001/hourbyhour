@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/remove_selected"
+        android:icon="@drawable/ic_clear_all_black_24dp"
+        android:title="@string/remove_items"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/add_to_do"
         android:icon="@drawable/ic_add_black_24dp"
         android:title="@string/add_item_to_do"

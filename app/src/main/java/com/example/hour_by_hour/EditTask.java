@@ -36,6 +36,7 @@ public class EditTask extends AppCompatActivity {
     private DatePicker startDate;
     private Task task;
     private int taskIndex;
+    private Spinner repeatingSpinner;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,11 +51,11 @@ public class EditTask extends AppCompatActivity {
         setContentView(R.layout.activity_edit_task);
         ActionBar ab = getSupportActionBar();
 
-        Spinner spinner = findViewById(R.id.spinner_edit);
+        repeatingSpinner = findViewById(R.id.spinner_edit);
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(this, R.array.repeating_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        repeatingSpinner.setAdapter(adapter);
 
         if(ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
@@ -170,6 +171,9 @@ public class EditTask extends AppCompatActivity {
         task.setName(name.getText().toString());
         task.setDescription(description.getText().toString());
         task.setLocation(location.getText().toString());
+        task.setRepeating(repeatingSpinner.getSelectedItem().toString());
+        Log.i("EditTask",task.getRepeating());
+        Log.i("EditTask", repeatingSpinner.getSelectedItem().toString());
 
         if(Build.VERSION.SDK_INT >= 23) {
             task.setStartHour(startTime.getHour());

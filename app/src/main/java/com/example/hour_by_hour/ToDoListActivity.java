@@ -13,16 +13,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDialogFragment.AddNewToDoDialogListener{
     List<ToDo> _toDoList;
-    List<ToDo> _completeList;
     RecyclerView.Adapter mAdapter;
     Gson gson;
 
@@ -34,7 +35,6 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
         gson = new Gson();
 
         _toDoList = new ArrayList<>();
-        _completeList = new ArrayList<>();
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         if(sharedPref.contains(getString(R.string.SAVE_DATA_TO_DO_LIST))) {
@@ -42,13 +42,6 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
              if(toDoString != null && !toDoString.equals("Empty")) {
                  _toDoList = gson.fromJson(toDoString, new TypeToken<List<ToDo>>(){}.getType());
              }
-        }
-
-        if(sharedPref.contains(getString(R.string.SAVE_DATA_COMPLETED_LIST))) {
-            String completeString = sharedPref.getString(getString(R.string.SAVE_DATA_COMPLETED_LIST), "Empty");
-            if(completeString != null && !completeString.equals("Empty")) {
-                _completeList = gson.fromJson(completeString, new TypeToken<List<ToDo>>(){}.getType());
-            }
         }
 
         initializeRecyclerView(_toDoList);
@@ -85,35 +78,33 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
                 // alert dialog
                 showAddToDoDialog();
                 return true;
+
+            case (R.id.remove_selected):
+                for(int i = _toDoList.size() - 1; i >= 0; i--) {
+                    if(_toDoList.get(i).get_completed()){
+                        _toDoList.remove(i);
+                        Log.i("ToDoListActivity", "Removed Item");
+                    }
+
+                    initializeRecyclerView(_toDoList);
+                }
+                return true;
+
             default:
                 // shouldn't get here at all
                 return false;
         }
     }
 
-    void rearrangeItems() {
-        for (ToDo item : _toDoList) {
-            if (item.get_completed()) {
-                _completeList.add(item);
-                _toDoList.remove(item);
-            }
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
-
-        rearrangeItems();
-
         gson = new Gson();
         String toDoJSON = gson.toJson(_toDoList);
-        String completeJSON = gson.toJson(_completeList);
 
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.SAVE_DATA_TO_DO_LIST),toDoJSON);
-        editor.putString(getString(R.string.SAVE_DATA_COMPLETED_LIST), completeJSON);
         editor.apply();
     }
 
@@ -128,16 +119,15 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String name) {
         _toDoList.add(new ToDo(name));
-
-        for(ToDo item: _toDoList){
-            Log.i("ToDoActivity", item.get_name());
-        }
-
         initializeRecyclerView(_toDoList);
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         dialog.dismiss();
+    }
+
+    public void set_toDoList(List<ToDo> _toDoList) {
+        this._toDoList = _toDoList;
     }
 }

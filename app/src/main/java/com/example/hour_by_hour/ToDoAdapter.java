@@ -26,7 +26,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
      * Display system that is used
      */
     public class ToDoViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, Serializable{
+            implements View.OnClickListener, CompoundButton.OnCheckedChangeListener,  Serializable{
 
         final TextView toDoName;
         final CheckBox complete;
@@ -43,12 +43,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
 
             itemView.setOnClickListener(this);
 
-            complete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    complete.setChecked(isChecked);
-                }
-            });
+            complete.setOnCheckedChangeListener(this);
         }
 
         /**
@@ -60,14 +55,20 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
             int position = getAdapterPosition();
 
             if(position != RecyclerView.NO_POSITION) {
-                ToDo task = toDoList.get(position);
-                task.set_completed(!task.get_completed());
+                CheckBox checkBox = view.findViewById(R.id.checkBox);
+                ToDo toDo = toDoList.remove(position);
+                toDo.set_completed(checkBox.isChecked());
+                toDoList.add(position,toDo);
 
-                CheckBox cb = view.findViewById(R.id.checkBox);
-                cb.setChecked(task.get_completed());
+                Context context = view.getContext();
+                ((ToDoListActivity) context).set_toDoList(toDoList);
             }
         }
 
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            this.onClick(buttonView);
+        }
     }
 
     /**

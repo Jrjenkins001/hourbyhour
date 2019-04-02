@@ -2,11 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/remove_shared_prefernces"
-        android:icon="@drawable/ic_error_black_24dp"
-        android:title="Delete Everything"
-        app:showAsAction="always" />
-    <item
         android:title="@string/edit_event_menu_add"
         android:icon="@drawable/ic_add_black_24dp"
         android:id="@+id/action_add_new_event"
