@@ -6,11 +6,15 @@ import android.os.Parcelable;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
+/**
+ * Data holder for an event. Has a name, location, description, start and end hours and minutes,
+ * and a starting year month and day.
+ */
 public class Task implements Serializable, Parcelable, Comparable<Task> {
     private int startHour;
     private int startMinute;
@@ -21,9 +25,9 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     String name;
     String location;
 
-    int startYear;
-    int startMonth;
-    int startDay;
+    private int startYear;
+    private int startMonth;
+    private int startDay;
 
     String repeating;
 
@@ -45,19 +49,6 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         setStartDate(CalendarDay.today());
 
         repeating = "None";
-    }
-
-    Task (Task task) {
-        this.setName(task.name);
-        this.setDescription(task.getDescription());
-        this.setLocation(task.getLocation());
-        this.setStartDate(task.getStartDate());
-        this.setStartHour(task.getStartHour());
-        this.setStartMinute(task.getStartMinute());
-        this.setEndHour(task.getEndHour());
-        this.setEndMinute(task.getEndMinute());
-        this.setStartDate(task.getStartDate());
-        this.repeating = task.repeating;
     }
 
     String getLocation() {
@@ -146,6 +137,11 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         this.repeating = repeating;
     }
 
+    /**
+     * If the task is repeating, it will determine where the task's next repetition is at and return that task.
+     * @param context allows for access to the repetition type
+     * @return the next task in the repeating list
+     */
     Task getNextRepeating(Context context){
         Task task = this;
         int addDay = startDay;
@@ -174,7 +170,20 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         return task;
     }
 
+    /**
+     * This will determine where to put the next repeating day at. If the
+     * day is in a different month or year, adjustments will be made as
+     * necessary
+     * @param task the task that is being repeated
+     * @param addNum how far out is the repeated task
+     * @return the next repeating task
+     */
+    @Contract("null, _ -> null")
     private static Task determineDay(Task task, int addNum){
+        if(task == null){
+            return null;
+        }
+
         int maxDaysOfMonth;
 
         int startMonth = task.startMonth;
@@ -225,16 +234,20 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>(){
+        @NotNull
+        @Contract("_ -> new")
         public Task createFromParcel(Parcel in) {
             return new Task(in);
         }
 
+        @NotNull
+        @Contract(value = "_ -> new", pure = true)
         public Task[] newArray(int size) {
             return new Task[size];
         }
     };
 
-    private Task(Parcel in) {
+    private Task(@NotNull Parcel in) {
         name = in.readString();
         location = in.readString();
         description = in.readString();
@@ -250,18 +263,6 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
 
     @Override
     public int compareTo(Task o) {
-        if(this.startHour > o.startHour) {
-            return 1;
-        } else if (this.startHour < o.startHour){
-            return -1;
-        } else {
-            if(this.startMinute > o.startMinute) {
-                return 1;
-            } else if (this.startMinute < o.startMinute) {
-                return -1;
-            } else {
-                return this.name.compareTo(o.name);
-            }
-        }
+        return this.name.compareTo(o.name);
     }
 }

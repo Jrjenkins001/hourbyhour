@@ -101,8 +101,8 @@ implements Serializable {
         TextView startTimeView = holder.startTime;
         TextView endTimeView = holder.endTime;
 
-        nameView.setText(task.name);
-        locationView.setText(task.location);
+        nameView.setText(task.getName());
+        locationView.setText(task.getLocation());
         startTimeView.setText(task.getStartTime());
         endTimeView.setText(task.getEndTime());
     }

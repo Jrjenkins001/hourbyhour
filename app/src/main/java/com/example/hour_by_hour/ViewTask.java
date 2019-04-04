@@ -1,9 +1,9 @@
 package com.example.hour_by_hour;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Parcelable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,16 +15,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class ViewTask extends AppCompatActivity {
+/**
+ * Displays the task and the information related to it
+ */
+public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskAlertFragment.DeleteTaskListener {
     private CalendarDay calendarDay;
     private Task task;
     private int taskIndex;
@@ -76,7 +75,13 @@ public class ViewTask extends AppCompatActivity {
                 return true;
 
             case(R.id.delete_event_menu_button):
-                deleteEventClick();
+                if(task.getRepeating().equals(getString(R.string.none_array))){
+                    deleteEventClick();
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    DeleteRepeatableTaskAlertFragment alertDialog = new DeleteRepeatableTaskAlertFragment();
+                    alertDialog.show(fm, "fragment_alert");
+                }
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -84,38 +89,67 @@ public class ViewTask extends AppCompatActivity {
 
     }
 
-    public void deleteEventClick() {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.saved_data_info), Context.MODE_PRIVATE);
-        String daysListJSON = sharedPreferences.getString(getString(R.string.saved_preferences_json), "NULL");
+    @Override
+    public void deleteSingleTask() {
+        deleteEventClick();
+    }
 
-        if(daysListJSON != null && !daysListJSON.equals("NULL")){
-            Gson g = new Gson();
-            Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
-            HashMap<String, ArrayList<Task>> daysList = g.fromJson(daysListJSON, type);
+    @Override
+    public void deleteAllRepeatableTasks() {
+        if(task == null || task.getRepeating().equals(getString(R.string.none_array))){
+            return;
+        }
 
-            ArrayList<Task> taskList = daysList.get(calendarDay.toString());
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        ArrayList<Task> tasks = days.get(task.getStartDate().toString());
 
+        if(tasks != null) {
+            while (tasks.remove(task)) {
+                days.put(task.getStartDate().toString(),tasks);
+                task = task.getNextRepeating(ViewTask.this);
+                tasks = days.get(task.getStartDate().toString());
+            }
+        }
 
-            try {
-                if (taskList != null) {
-                    taskList.remove(taskIndex);
+        Toast.makeText(this,"Deleted All Items", Toast.LENGTH_SHORT).show();
 
-                    daysList.put(calendarDay.toString(), taskList);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void cancel(DialogFragment dialogFragment) {
+        dialogFragment.dismiss();
+    }
+
+    /**
+     * Remove a single item from one day's list
+     */
+    private void deleteEventClick() {
+        HashMap<String, ArrayList<Task>> daysList = MainActivity.getSavedDays(new View(this));
+
+        ArrayList<Task> taskList = daysList.get(calendarDay.toString());
+        String toastText = "Deleted Task Successfully";
+
+        try {
+            if (taskList != null) {
+                if(!taskList.remove(task)){
+                    toastText = "Error Deleting Task";
                 }
 
-            } catch (ArrayIndexOutOfBoundsException e) {
-                Log.d("ViewTask", e.getMessage());
+                daysList.put(calendarDay.toString(), taskList);
             }
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.saved_preferences_json), g.toJson(daysList))
-                    .apply();
-
-            Toast toast = Toast.makeText(this, "Task Deleted", Toast.LENGTH_SHORT);
-            toast.show();
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.d("ViewTask", e.getMessage());
         }
+
+        MainActivity.putSavedDays(new View(this), daysList);
+
+        Toast toast = Toast.makeText(this, toastText, Toast.LENGTH_SHORT);
+        toast.show();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

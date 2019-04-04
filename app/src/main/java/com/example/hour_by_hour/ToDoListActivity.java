@@ -13,19 +13,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDialogFragment.AddNewToDoDialogListener{
-    List<ToDo> _toDoList;
-    RecyclerView.Adapter mAdapter;
-    Gson gson;
+    private List<ToDo> _toDoList;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +52,7 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ToDoAdapter(toDo);
+        RecyclerView.Adapter mAdapter = new ToDoAdapter(toDo);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -111,13 +108,14 @@ public class ToDoListActivity extends AppCompatActivity implements AddNewToDoDia
     /**
      * Create an instance of the dialog fragment and show it
      */
-    public void showAddToDoDialog() {
-        DialogFragment dialog = new AddNewToDoDialogFragment();
+    private void showAddToDoDialog() {
+        AddNewToDoDialogFragment dialog = new AddNewToDoDialogFragment();
+        dialog.setUsedContext(this);
         dialog.show(getSupportFragmentManager(), "AddNewToDo");
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String name) {
+    public void onDialogPositiveClick(String name) {
         _toDoList.add(new ToDo(name));
         initializeRecyclerView(_toDoList);
     }

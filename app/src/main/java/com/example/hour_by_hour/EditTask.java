@@ -3,12 +3,12 @@ package com.example.hour_by_hour;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,15 +20,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static java.util.Collections.sort;
 
-public class EditTask extends AppCompatActivity {
+/**
+ * Activity used to create a new task or modify an existing one
+ */
+public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskAlertFragment.DeleteTaskListener {
     private TextView name;
     private TextView description;
     private TextView location;
@@ -96,7 +100,16 @@ public class EditTask extends AppCompatActivity {
 
             case R.id.action_delete_event:
                 // User clicked on deleting the event currently being worked on
-                deleteEvent();
+                if(task == null){
+                    FragmentManager fm = getSupportFragmentManager();
+                    DeletePotentialAlertFragment alertDialog = DeletePotentialAlertFragment.newInstance();
+                    alertDialog.show(fm, "fragment_alert");
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    DeleteRepeatableTaskAlertFragment alertDialog = new DeleteRepeatableTaskAlertFragment();
+                    alertDialog.show(fm, "fragment_alert");
+                }
+
                 return true;
 
             default:
@@ -124,18 +137,19 @@ public class EditTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Will take an existing task and change the fields around allowing for the
+     * item to be updated and displayed properly
+     */
     private void modifyEvent() {
         HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(findViewById(R.id.toolbar_edit_event));
 
         ArrayList<Task> tasks = days.get(task.getStartDate().toString());
         Task newTask = createTask();
 
-        Log.i("EditTask", new Gson().toJson(tasks));
-
         if(tasks != null) {
             tasks.remove(taskIndex);
         } else {
-            Log.e("EditTask", "ERROR: tasks is null");
             return;
         }
 
@@ -197,7 +211,7 @@ public class EditTask extends AppCompatActivity {
      * fill the newly created activity with the task given
      * @param task the information to fill out the fields
      */
-    private void fillFields(Task task){
+    private void fillFields(@NotNull Task task){
         name.setText(task.getName());
         description.setText(task.getDescription());
         location.setText(task.getLocation());
@@ -205,26 +219,68 @@ public class EditTask extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= 23) {
             startTime.setHour(task.getStartHour());
             startTime.setMinute(task.getStartMinute());
+            endTime.setHour(task.getEndHour());
+            endTime.setMinute(task.getEndMinute());
         } else {
             startTime.setCurrentHour(task.getStartHour());
             startTime.setCurrentMinute(task.getStartMinute());
+            endTime.setCurrentHour(task.getEndHour());
+            endTime.setCurrentMinute(task.getEndMinute());
         }
 
         startDate.updateDate(task.getStartDate().getYear(), task.getStartDate().getMonth(), task.getStartDate().getDay());
     }
 
-    /**
-     * delete the event that is currently being edited, if there this is an existing
-     * event, delete from the list and return to the main activity. Otherwise, just
-     * return to the main activity.
-     */
-    private void deleteEvent() {
-        showAlertDialog();
+    @Override
+    public void deleteAllRepeatableTasks() {
+        if(task == null || task.getRepeating().equals(getString(R.string.none_array))){
+            return;
+        }
+
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        ArrayList<Task> tasks = days.get(task.getStartDate().toString());
+
+        if(tasks != null) {
+            while (tasks.remove(task)) {
+                days.put(task.getStartDate().toString(),tasks);
+                task = task.getNextRepeating(EditTask.this);
+                tasks = days.get(task.getStartDate().toString());
+                if(tasks == null){
+                    return;
+                }
+            }
+        }
+
+        MainActivity.putSavedDays(new View(this), days);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
-    private void showAlertDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        DeleteAlertFragment alertDialog = DeleteAlertFragment.newInstance();
-        alertDialog.show(fm, "fragment_alert");
+    @Override
+    public void deleteSingleTask() {
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        ArrayList<Task> tasks = days.get(task.getStartDate().toString());
+
+        if(tasks != null){
+            if(tasks.remove(task)){
+                Toast.makeText(this, "Deleted the task", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this,"Error deleting task", Toast.LENGTH_SHORT).show();
+            }
+
+            days.put(task.getStartDate().toString(), tasks);
+
+            MainActivity.putSavedDays(new View(this), days);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), task.getStartDate());
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void cancel(DialogFragment dialogFragment) {
+        dialogFragment.dismiss();
     }
 }

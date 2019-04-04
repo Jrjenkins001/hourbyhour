@@ -16,12 +16,10 @@ import android.widget.Toast;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DeleteAlertFragment extends DialogFragment {
+public class DeletePotentialAlertFragment extends DialogFragment {
 
-    public DeleteAlertFragment() {}
-
-    public static DeleteAlertFragment newInstance() {
-        return new DeleteAlertFragment();
+    public static DeletePotentialAlertFragment newInstance() {
+        return new DeletePotentialAlertFragment();
     }
 
     @NonNull

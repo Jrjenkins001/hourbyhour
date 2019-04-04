@@ -9,13 +9,11 @@
     <string name="saved_preferences_json">com.example.hour_by_hour.SAVED_PREFERENCES_JSON</string>
     <string name="set_repeatability_edit">Set Repeating</string>
     <string name="SAVE_DATA_TO_DO_LIST">com.example.hour_by_hour.SAVE_DATA_TO_DO_LIST</string>
-    <string name="SAVE_DATA_COMPLETED_LIST">com.example.hour_by_hour.SAVE_DATA_COMPLETE_LIST</string>
 
     <!-- View values -->
     <string name="event_name">Name</string>
     <string name="location_name">Location</string>
     <string name="time_start">Start Time</string>
-    <string name="time_end">End Time</string>
     <string name="description_tag">Description</string>
     <string name="alert_tag">Notifications</string>
     <string name="add_alert_tag">Add new Notification</string>
@@ -38,7 +36,7 @@
     <string name="EXTRA_CALENDAR_DAY">com.example.hour_by_hour.CALENDAR_DAY</string>
     <string name="EXTRA_TASK">com.example.hour_by_hour.TASK</string>
 
-    <!-- Temp Values for placeholders-->
+    <!-- Values for placeholders-->
     <string name="text_name">Name</string>
     <string name="text_location">Location</string>
     <string name="text_select_date">Date</string>
@@ -47,12 +45,9 @@
     <string name="task_description">No Description</string>
     <string name="remove_items">remove_items</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <!--
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="EXTRA_VIEW_SELECTION">com.example.hour_by_hour.EXTRA_VIEW_SELECTION</string>
-    <string name="switch_lists_to_do">Switch Lists</string>
-    <string name="create_to_do_dialog">Enter a name</string>
-    <string name="EXTRA_TASK_EDIT">com.example.hour_by_hour.EXTRA_TASK_EDIT</string>
-    -->
+    <!-- Values for notification information -->
+    <string name="notification_title">Title</string>
+    <string name="notification_message">message</string>
+    <string name="notification_create_message">Create Message</string>
+    <string name="notification_create_alarm">Create Alarm</string>
 </resources>

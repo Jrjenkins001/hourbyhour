@@ -7,33 +7,41 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 public class AddNewToDoDialogFragment extends DialogFragment {
 
+    /**
+     * Used to implement and pass data used to create the responding
+     * item
+     */
     public interface AddNewToDoDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, String name);
+        void onDialogPositiveClick(String name);
         void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    AddNewToDoDialogListener listener;
+    private AddNewToDoDialogListener listener;
+    private Context context;
+
+    public void setUsedContext(Context context){
+        this.context = context;
+    }
 
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        //LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        final View v = inflater.inflate(R.layout.to_do_list_dialog, null, false);
+        final View v = View.inflate(context, R.layout.to_do_list_dialog, null);
         builder.setView(v);
         final EditText et = v.findViewById(R.id.input_name);
 
         builder.setPositiveButton(R.string.to_do_dialog_done, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogPositiveClick(AddNewToDoDialogFragment.this, et.getText().toString());
+                        listener.onDialogPositiveClick(et.getText().toString());
                     }
                 })
 
