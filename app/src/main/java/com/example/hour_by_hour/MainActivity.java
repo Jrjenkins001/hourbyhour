@@ -1,5 +1,6 @@
 package com.example.hour_by_hour;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         setSupportActionBar(myToolbar);
 
         notificationManger = NotificationManagerCompat.from(this);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
 
         editTextTitle = findViewById(R.id.edit_text_title);
         editTextMessage = findViewById(R.id.edit_text_message);

@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_event"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
 
         <LinearLayout
@@ -115,9 +115,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
+                android:text="@string/text_select_date"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/location_text_edit"
-                android:text="@string/text_select_date" />
+                app:layout_constraintTop_toBottomOf="@+id/location_text_edit" />
 
             <DatePicker
                 android:id="@+id/start_date_picker_edit"
@@ -155,9 +155,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
+                android:text="@string/text_end_time"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/location_text_edit"
-                android:text="@string/text_end_time" />
+                app:layout_constraintTop_toBottomOf="@+id/location_text_edit" />
 
             <TimePicker
                 android:id="@+id/end_time_picker_edit"
@@ -170,19 +170,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/start_time_text_edit" />
 
             <TextView
-                android:labelFor="@+id/spinner_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/set_repeatability_edit"/>
+                android:labelFor="@+id/spinner_edit"
+                android:text="@string/set_repeatability_edit" />
 
             <Spinner
                 android:id="@+id/spinner_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:id="@+id/notification_text_edit"
@@ -201,7 +201,8 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/add_alert_tag"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notification_text_edit" />
+                app:layout_constraintTop_toBottomOf="@+id/notification_text_edit"
+                android:onClick="sendOnChannel1"/>
 
         </LinearLayout>
     </ScrollView>

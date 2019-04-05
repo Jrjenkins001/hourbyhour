@@ -1,10 +1,17 @@
 package com.example.hour_by_hour;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +32,12 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.hour_by_hour.Notification.CHANNEL_1_ID;
+import static com.example.hour_by_hour.Notification.CHANNEL_2_ID;
 import static java.util.Collections.sort;
 
 /**
@@ -44,12 +54,15 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
     private Task task;
     private int taskIndex;
     private Spinner repeatingSpinner;
+    private NotificationManagerCompat notificationManger;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit_event, menu);
+
         return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -86,6 +99,9 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
         }
 
         taskIndex = getIntent().getIntExtra(getString(R.string.EXTRA_TASK_INFO), -100);
+
+
+        notificationManger = NotificationManagerCompat.from(this);
     }
 
     @Override
@@ -286,5 +302,80 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
     @Override
     public void cancel(DialogFragment dialogFragment) {
         dialogFragment.dismiss();
+    }
+
+    public void sendOnChannel1(View view) {
+        String title = "Event beginning soon";//editTextTitle.getText().toString(); event_name_edit start_time_picker_edit name.getText().toString()
+        String message;
+        if(Build.VERSION.SDK_INT >= 23) {
+            message = startTime.getHour() + ":" + startTime.getMinute() + " " + name.getText().toString();
+        } else {
+            message = name.getText().toString() + "begins soon";
+        }
+
+        Intent notifyIntent = new Intent(this,MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,
+                0, notifyIntent,0);
+
+        Intent broadcastIntent = new Intent (this, NotificationReceiver.class);
+        broadcastIntent.putExtra("toastMessage", message);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
+                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        android.app.Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setColor(Color.BLUE)
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .addAction(R.mipmap.ic_launcher, "Toast", actionIntent)
+                .build();
+
+        notificationManger.notify(1,notification);
+    }
+
+    public void sendOnChannel2(View view) {
+        String title = "Event beginning soon";//editTextTitle.getText().toString(); event_name_edit start_time_picker_edit name.getText().toString()
+        String message;
+        String dateTime;
+
+        //I created this if to try and convert the start time to milliseconds but I couldn't do it
+        if(Build.VERSION.SDK_INT >= 23) {
+            dateTime = startDate.getYear() + "/" + startDate.getMonth() +
+                    "/" + startDate.getDayOfMonth() + " " + startTime.getHour() +
+                    ":" + startTime.getMinute() + ":00";
+        }
+
+        if(Build.VERSION.SDK_INT >= 23) {
+            message = startTime.getHour() + ":" + startTime.getMinute() + " " + name.getText().toString();
+        } else {
+            message = name.getText().toString() + "begins soon";
+        }
+
+        android.app.Notification notification = new NotificationCompat.Builder(this, CHANNEL_2_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        int delay = 1000000;
+        //notificationManger.notify(2,notification);
+        scheduleNotification(notification, delay);
+    }
+
+    public void scheduleNotification(android.app.Notification notification, int delay) {
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID,1);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureTimeInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureTimeInMillis, pendingIntent);
+
     }
 }
