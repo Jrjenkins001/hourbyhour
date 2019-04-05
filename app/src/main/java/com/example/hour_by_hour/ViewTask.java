@@ -56,7 +56,6 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
         startTime.setText(task.getStartTime());
         endTime.setText(task.getEndTime());
         description.setText(task.getDescription());
-
     }
 
     @Override
@@ -110,9 +109,7 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
         if(tasks != null) {
             while (tasks != null && tasks.remove(task)) {
                 days.put(task.getStartDate().toString(),tasks);
-                Log.i("ViewTask", task.getStartDate().toString());
                 task = task.getNextRepeating(ViewTask.this);
-                Log.i("ViewTask", task.getStartDate().toString());
                 tasks = days.get(task.getStartDate().toString());
             }
         } else {
@@ -121,6 +118,7 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
 
         Toast.makeText(this,"Deleted All Items", Toast.LENGTH_SHORT).show();
 
+        MainActivity.putSavedDays(this, days);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

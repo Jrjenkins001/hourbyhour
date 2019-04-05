@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                         _days.put(calendarDay.toString(), taskItems);
                     } else {
                         RepeatableEvents re = new RepeatableEvents();
-                        re.getStartingInfo(this, task);
+                        re.getStartingInfo(this, task, _days);
                         re.execute();
-                        _days = getSavedDays(this);
+                        _days = re.get_days();
                     }
                 }
                 _taskList = _days.get(calendarDay.toString());
@@ -295,15 +295,19 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
          * @param context a reference for the comparisons
          * @param task the task to be repeated
          */
-        void getStartingInfo(Context context, Task task){
+        void getStartingInfo(Context context, Task task, HashMap<String, ArrayList<Task>> _days){
             this.context = new WeakReference<>(context);
             this.task = task;
+            this._days = _days;
+        }
+
+        HashMap<String, ArrayList<Task>> get_days(){
+            return _days;
         }
 
         @Override
         protected HashMap<String, ArrayList<Task>> doInBackground(Void ... aVoid) {
             int repetitions;
-            _days = MainActivity.getSavedDays(context.get());
 
             if(task.repeating.equals(context.get().getString(R.string.yearly_array))){
                 repetitions = NUM_REPEATING_YEARLY;
@@ -335,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         @Override
         protected void onPostExecute(HashMap<String, ArrayList<Task>> _days) {
-            MainActivity.putSavedDays(context.get(), _days);
             Toast.makeText(context.get(), "Completed adding events", Toast.LENGTH_LONG).show();
             super.onPostExecute(_days);
         }

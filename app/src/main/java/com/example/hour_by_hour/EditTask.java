@@ -254,6 +254,8 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
                 task = task.getNextRepeating(EditTask.this);
                 tasks = days.get(task.getStartDate().toString());
             }
+        } else {
+            toastText = "Unable to remove Task";
         }
 
         Toast.makeText(this,toastText, Toast.LENGTH_SHORT).show();

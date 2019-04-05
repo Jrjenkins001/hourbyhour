@@ -21,9 +21,9 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     private int endHour;
     private int endMinute;
 
-    String description;
-    String name;
-    String location;
+    private String description;
+    private String name;
+    private String location;
 
     private int startYear;
     private int startMonth;
@@ -49,6 +49,18 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
         setStartDate(CalendarDay.today());
 
         repeating = "None";
+    }
+
+    private Task(Task o){
+        this.setDescription(o.getDescription());
+        this.setName(o.getName());
+        this.setLocation(o.getLocation());
+        this.setStartDate(o.startYear, o.startMonth, o.startDay);
+        this.setStartHour(o.getStartHour());
+        this.setStartMinute(o.getStartMinute());
+        this.setEndHour(o.getEndHour());
+        this.setEndMinute(o.getEndMinute());
+        this.setRepeating(o.getRepeating());
     }
 
     String getLocation() {
@@ -143,15 +155,15 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
      * @return the next task in the repeating list
      */
     Task getNextRepeating(Context context){
-        Task task = this;
+        Task task = new Task(this);
         int addDay = startDay;
         int addMonth = startMonth;
         int addYear = startYear;
 
         if (getRepeating().equals(context.getString(R.string.daily_array))){
-            return determineDay(this, 1);
+            task = determineDay(task, 1);
         } else if (getRepeating().equals((context.getString(R.string.weekly_array)))){
-            return determineDay(this, 7);
+            task = determineDay(task, 7);
         } else if (getRepeating().equals((context.getString(R.string.monthly_array)))) {
             if(addMonth == 12){
                 addMonth = 1;
@@ -159,13 +171,13 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
             } else {
                 addMonth++;
             }
+            task.setStartDate(addYear, addMonth, addDay);
         } else if (getRepeating().equals((context.getString(R.string.yearly_array)))) {
             addYear++;
+            task.setStartDate(addYear, addMonth, addDay);
         } else {
             return null;
         }
-
-        task.setStartDate(addYear, addMonth, addDay);
 
         return task;
     }
