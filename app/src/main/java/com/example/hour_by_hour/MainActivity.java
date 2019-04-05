@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         _widget.setCurrentDate(CalendarDay.today());
 
         _calendarDay = null;
-        _days = getSavedDays(new View(this));
+        _days = getSavedDays(this);
 
 
         Bundle extras = getIntent().getExtras();
@@ -74,15 +75,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
                 }
 
                 if(task != null) {
-                    RepeatableEvents re = new RepeatableEvents();
-                    re.getStartingInfo(this, task);
-                    re.execute();
+                    if(task.getRepeating().equals(getString(R.string.none_array))){
+                        taskItems.add(task);
 
-                    taskItems.add(task);
+                        sort(taskItems);
 
-                    sort(taskItems);
-
-                    _days.put(calendarDay.toString(), taskItems);
+                        _days.put(calendarDay.toString(), taskItems);
+                    } else {
+                        RepeatableEvents re = new RepeatableEvents();
+                        re.getStartingInfo(this, task);
+                        re.execute();
+                        _days = getSavedDays(this);
+                    }
                 }
                 _taskList = _days.get(calendarDay.toString());
                 _widget.setCurrentDate(calendarDay);
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         super.onPause();
 
         if(_days.size() > 0) {
-            putSavedDays(new View(this), _days);
+            putSavedDays(this, _days);
         }
     }
 
@@ -216,14 +220,14 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
     /**
      * Returns from Shared Preferences the HashMap with the list of days
      * and all the tasks within those days
-     * @param view allows for the context to be received
+     * @param context used to access shared preferences
      * @return a list of days and the tasks related
      */
-    static HashMap<String, ArrayList<Task>> getSavedDays(@NonNull View view) {
+    static HashMap<String, ArrayList<Task>> getSavedDays(@NonNull Context context) {
         HashMap<String, ArrayList<Task>> days;
         Gson gson = new Gson();
-        SharedPreferences sharedPref = view.getContext().getSharedPreferences(view.getContext().getString(R.string.saved_data_info), Context.MODE_PRIVATE);
-        String dataString = sharedPref.getString(view.getContext().getString(R.string.saved_preferences_json), "NULL");
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+        String dataString = sharedPref.getString(context.getString(R.string.saved_preferences_json), "NULL");
 
 
         if (dataString != null && !dataString.equals("NULL")) {
@@ -244,18 +248,18 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
     /**
      * Writes the list of days and events to SharedPreferences in JSON
-     * @param view allows for the context to be received
+     * @param context location of the shared preferences
      * @param days the list of days to be saved
      */
-    static void putSavedDays(@NonNull View view, HashMap<String, ArrayList<Task>> days) {
+    static void putSavedDays(@NonNull Context context, HashMap<String, ArrayList<Task>> days) {
         Gson g = new Gson();
         Type type = new TypeToken<HashMap<String, ArrayList<Task>>>(){}.getType();
         String dayJSON = g.toJson(days, type);
 
         SharedPreferences sharedPref =
-                view.getContext().getSharedPreferences(view.getContext().getString(R.string.saved_data_info), Context.MODE_PRIVATE);
+                context.getSharedPreferences(context.getString(R.string.saved_data_info), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(view.getContext().getString(R.string.saved_preferences_json), dayJSON);
+        editor.putString(context.getString(R.string.saved_preferences_json), dayJSON);
         editor.apply();
     }
 
@@ -276,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
      * the event to be made the required amount of times. This will work in the
      * background.
      */
-    static class RepeatableEvents extends AsyncTask<Void, Void, Void> {
+    static class RepeatableEvents extends AsyncTask<Void, Void, HashMap<String, ArrayList<Task>>> {
         private final int NUM_REPEATING_DAILY = 365;
         private final int NUM_REPEATING_MONTHLY = 12;
         private final int NUM_REPEATING_YEARLY = 5;
@@ -284,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
 
         Task task;
         WeakReference<Context> context;
+        HashMap<String, ArrayList<Task>> _days;
 
         /**
          * Used to instantiate the class
@@ -296,9 +301,9 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
         }
 
         @Override
-        protected Void doInBackground(Void ... aVoid) {
+        protected HashMap<String, ArrayList<Task>> doInBackground(Void ... aVoid) {
             int repetitions;
-            HashMap<String, ArrayList<Task>> _days = MainActivity.getSavedDays(new View(context.get()));
+            _days = MainActivity.getSavedDays(context.get());
 
             if(task.repeating.equals(context.get().getString(R.string.yearly_array))){
                 repetitions = NUM_REPEATING_YEARLY;
@@ -313,23 +318,26 @@ public class MainActivity extends AppCompatActivity implements OnDateSelectedLis
             }
 
             for(int i = 0; i < repetitions; i++){
-                task = task.getNextRepeating(context.get());
                 ArrayList<Task> tasks = _days.get(task.getStartDate().toString());
                 if(tasks == null){
                     tasks = new ArrayList<>();
                 }
+
                 tasks.add(task);
                 sort(tasks);
                 _days.put(task.getStartDate().toString(), tasks);
+
+                task = task.getNextRepeating(context.get());
             }
 
-            return null;
+            return _days;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(HashMap<String, ArrayList<Task>> _days) {
+            MainActivity.putSavedDays(context.get(), _days);
             Toast.makeText(context.get(), "Completed adding events", Toast.LENGTH_LONG).show();
-            super.onPostExecute(aVoid);
+            super.onPostExecute(_days);
         }
     }
 }

@@ -265,4 +265,18 @@ public class Task implements Serializable, Parcelable, Comparable<Task> {
     public int compareTo(Task o) {
         return this.name.compareTo(o.name);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Task))
+            return false;
+
+        Task other = (Task) obj;
+        return this.getName().equals(other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

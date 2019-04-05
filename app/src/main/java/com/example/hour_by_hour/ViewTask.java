@@ -38,9 +38,6 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
 
         task = getIntent().getParcelableExtra(getString(R.string.EXTRA_TASK));
         taskIndex = getIntent().getIntExtra(getString(R.string.EXTRA_TASK_INFO), -100);
-        if(task == null) {
-            task = new Task();
-        }
 
         TextView name = findViewById(R.id.task_name);
         TextView location = findViewById(R.id.task_location);
@@ -48,13 +45,18 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
         TextView endTime = findViewById(R.id.task_end_time);
         TextView description = findViewById(R.id.task_description);
 
+        if(task == null) {
+            task = new Task();
+        }
+
         calendarDay = task.getStartDate();
 
-        name.setText(task.name);
-        location.setText(task.location);
+        name.setText(task.getName());
+        location.setText(task.getLocation());
         startTime.setText(task.getStartTime());
         endTime.setText(task.getEndTime());
-        description.setText(task.description);
+        description.setText(task.getDescription());
+
     }
 
     @Override
@@ -79,9 +81,11 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
                     deleteEventClick();
                 } else {
                     FragmentManager fm = getSupportFragmentManager();
-                    DeleteRepeatableTaskAlertFragment alertDialog = new DeleteRepeatableTaskAlertFragment();
+                    DialogFragment alertDialog = DeleteRepeatableTaskAlertFragment.newInstance(true);
                     alertDialog.show(fm, "fragment_alert");
                 }
+
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,15 +104,19 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
             return;
         }
 
-        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(this);
         ArrayList<Task> tasks = days.get(task.getStartDate().toString());
 
         if(tasks != null) {
-            while (tasks.remove(task)) {
+            while (tasks != null && tasks.remove(task)) {
                 days.put(task.getStartDate().toString(),tasks);
+                Log.i("ViewTask", task.getStartDate().toString());
                 task = task.getNextRepeating(ViewTask.this);
+                Log.i("ViewTask", task.getStartDate().toString());
                 tasks = days.get(task.getStartDate().toString());
             }
+        } else {
+            Log.i("ViewTask", "COuldn't Delete Items");
         }
 
         Toast.makeText(this,"Deleted All Items", Toast.LENGTH_SHORT).show();
@@ -126,25 +134,28 @@ public class ViewTask extends AppCompatActivity implements DeleteRepeatableTaskA
      * Remove a single item from one day's list
      */
     private void deleteEventClick() {
-        HashMap<String, ArrayList<Task>> daysList = MainActivity.getSavedDays(new View(this));
+        HashMap<String, ArrayList<Task>> daysList = MainActivity.getSavedDays(this);
 
-        ArrayList<Task> taskList = daysList.get(calendarDay.toString());
+        ArrayList<Task> taskList = daysList.get(task.getStartDate().toString());
         String toastText = "Deleted Task Successfully";
 
         try {
             if (taskList != null) {
-                if(!taskList.remove(task)){
+                /*
+                if(!taskList.remove(task){
                     toastText = "Error Deleting Task";
-                }
-
-                daysList.put(calendarDay.toString(), taskList);
+                }*/
+                taskList.remove(taskIndex);
+                daysList.put(task.getStartDate().toString(), taskList);
+            } else {
+                Log.i("ViewTask", "List is null");
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.d("ViewTask", e.getMessage());
         }
 
-        MainActivity.putSavedDays(new View(this), daysList);
+        MainActivity.putSavedDays(this, daysList);
 
         Toast toast = Toast.makeText(this, toastText, Toast.LENGTH_SHORT);
         toast.show();

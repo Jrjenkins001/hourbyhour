@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +40,7 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
     private TimePicker startTime;
     private TimePicker endTime;
     private DatePicker startDate;
+
     private Task task;
     private int taskIndex;
     private Spinner repeatingSpinner;
@@ -100,16 +102,19 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
 
             case R.id.action_delete_event:
                 // User clicked on deleting the event currently being worked on
+                FragmentManager fm = getSupportFragmentManager();
+                DialogFragment alertDialog;
                 if(task == null){
-                    FragmentManager fm = getSupportFragmentManager();
-                    DeletePotentialAlertFragment alertDialog = DeletePotentialAlertFragment.newInstance();
-                    alertDialog.show(fm, "fragment_alert");
+                    alertDialog = DeletePotentialAlertFragment.newInstance();
+                } else if(task.getRepeating().equals(getString(R.string.none_array))){
+                    alertDialog = DeleteRepeatableTaskAlertFragment
+                            .newInstance(false);
                 } else {
-                    FragmentManager fm = getSupportFragmentManager();
-                    DeleteRepeatableTaskAlertFragment alertDialog = new DeleteRepeatableTaskAlertFragment();
-                    alertDialog.show(fm, "fragment_alert");
+                    alertDialog = DeleteRepeatableTaskAlertFragment
+                            .newInstance(true);
                 }
 
+                alertDialog.show(fm, "fragment_alert");
                 return true;
 
             default:
@@ -142,7 +147,7 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
      * item to be updated and displayed properly
      */
     private void modifyEvent() {
-        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(findViewById(R.id.toolbar_edit_event));
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(findViewById(R.id.toolbar_edit_event).getContext());
 
         ArrayList<Task> tasks = days.get(task.getStartDate().toString());
         Task newTask = createTask();
@@ -167,7 +172,7 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
 
         days.put(newTask.getStartDate().toString(), tasks);
 
-        MainActivity.putSavedDays(new View(this), days);
+        MainActivity.putSavedDays(this, days);
 
         Toast toast = Toast.makeText(getApplicationContext(), "Event modified", Toast.LENGTH_LONG);
         toast.show();
@@ -234,24 +239,26 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
     @Override
     public void deleteAllRepeatableTasks() {
         if(task == null || task.getRepeating().equals(getString(R.string.none_array))){
+            this.deleteSingleTask();
             return;
         }
 
-        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(this);
         ArrayList<Task> tasks = days.get(task.getStartDate().toString());
 
+        String toastText = "Successfully removed Task";
+
         if(tasks != null) {
-            while (tasks.remove(task)) {
+            while (tasks != null && tasks.remove(task)) {
                 days.put(task.getStartDate().toString(),tasks);
                 task = task.getNextRepeating(EditTask.this);
                 tasks = days.get(task.getStartDate().toString());
-                if(tasks == null){
-                    return;
-                }
             }
         }
 
-        MainActivity.putSavedDays(new View(this), days);
+        Toast.makeText(this,toastText, Toast.LENGTH_SHORT).show();
+
+        MainActivity.putSavedDays(this, days);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -259,19 +266,14 @@ public class EditTask extends AppCompatActivity implements DeleteRepeatableTaskA
 
     @Override
     public void deleteSingleTask() {
-        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(new View(this));
+        HashMap<String, ArrayList<Task>> days = MainActivity.getSavedDays(this);
         ArrayList<Task> tasks = days.get(task.getStartDate().toString());
 
         if(tasks != null){
-            if(tasks.remove(task)){
-                Toast.makeText(this, "Deleted the task", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this,"Error deleting task", Toast.LENGTH_SHORT).show();
-            }
-
+            tasks.remove(taskIndex);
             days.put(task.getStartDate().toString(), tasks);
 
-            MainActivity.putSavedDays(new View(this), days);
+            MainActivity.putSavedDays(this, days);
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(getString(R.string.EXTRA_CALENDAR_DAY), task.getStartDate());

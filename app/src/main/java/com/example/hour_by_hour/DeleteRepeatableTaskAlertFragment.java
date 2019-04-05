@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
 public class DeleteRepeatableTaskAlertFragment extends DialogFragment {
+    boolean isRepeating;
+
     /**
      * Used to implement buttons
      */
@@ -17,6 +19,12 @@ public class DeleteRepeatableTaskAlertFragment extends DialogFragment {
         void deleteAllRepeatableTasks();
         void deleteSingleTask();
         void cancel(DialogFragment dialogFragment);
+    }
+
+    static public DialogFragment newInstance(boolean isRepeating){
+        DeleteRepeatableTaskAlertFragment df = new DeleteRepeatableTaskAlertFragment();
+        df.isRepeating = isRepeating;
+        return df;
     }
 
     private DeleteTaskListener listener;
@@ -38,15 +46,22 @@ public class DeleteRepeatableTaskAlertFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        String deleteSingleItem = "Delete";
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setMessage("Do you want to just this task or all repeating tasks too?");
-        alertDialogBuilder.setPositiveButton("Delete All Tasks", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.deleteAllRepeatableTasks();
-            }
-        });
-        alertDialogBuilder.setNeutralButton("Delete Single Task", new DialogInterface.OnClickListener() {
+        if(isRepeating) {
+            alertDialogBuilder.setMessage("Do you want to just this task or all repeating tasks too?");
+            alertDialogBuilder.setPositiveButton("Delete all items", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    listener.deleteAllRepeatableTasks();
+                }
+            });
+            deleteSingleItem = "Delete only this item";
+        } else {
+            alertDialogBuilder.setMessage("Are you sure you want to delete this task?");
+        }
+
+        alertDialogBuilder.setNeutralButton(deleteSingleItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.deleteSingleTask();
